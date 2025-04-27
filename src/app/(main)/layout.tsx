@@ -1,6 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import { AppSidebar } from "@/components/layout/Sidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (

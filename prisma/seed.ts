@@ -7,19 +7,19 @@ async function clearDatabase() {
   console.log("Clearing database...");
 
   // Delete in reverse order of dependencies
-  await prisma.attendanceRecords.deleteMany();
-  await prisma.attendanceSessions.deleteMany();
-  await prisma.studentSections.deleteMany();
-  await prisma.courseOfferings.deleteMany();
-  await prisma.courses.deleteMany();
-  await prisma.sections.deleteMany();
-  await prisma.departments.deleteMany();
-  await prisma.schools.deleteMany();
-  await prisma.semesters.deleteMany();
-  await prisma.academicYears.deleteMany();
-  await prisma.students.deleteMany();
-  await prisma.instructors.deleteMany();
-  await prisma.admins.deleteMany();
+  await prisma.attendanceRecord.deleteMany();
+  await prisma.attendanceSession.deleteMany();
+  await prisma.enrollment.deleteMany();
+  await prisma.courseOffering.deleteMany();
+  await prisma.course.deleteMany();
+  await prisma.section.deleteMany();
+  await prisma.department.deleteMany();
+  await prisma.school.deleteMany();
+  await prisma.semester.deleteMany();
+  await prisma.academicYear.deleteMany();
+  await prisma.student.deleteMany();
+  await prisma.instructor.deleteMany();
+  await prisma.admin.deleteMany();
 
   console.log("Database cleared successfully");
 }
@@ -35,7 +35,7 @@ async function main() {
     const hashedPassword = await hash("password123", 10); // Hash a simple password
 
     // --- 1. Academic Years ---
-    const year1 = await prisma.academicYears.create({
+    const year1 = await prisma.academicYear.create({
       data: {
         name: "Year 2023/2024",
         start_date: new Date("2023-09-01"),
@@ -43,7 +43,7 @@ async function main() {
         is_active: false,
       },
     });
-    const year2 = await prisma.academicYears.create({
+    const year2 = await prisma.academicYear.create({
       data: {
         name: "Year 2024/2025",
         start_date: new Date("2024-09-01"),
@@ -54,7 +54,7 @@ async function main() {
     console.log(`Created academic years: ${year1.id}, ${year2.id}`);
 
     // --- 2. Semesters ---
-    const semester1 = await prisma.semesters.create({
+    const semester1 = await prisma.semester.create({
       data: {
         academic_year_id: year2.id,
         name: "First Semister",
@@ -63,7 +63,7 @@ async function main() {
         is_active: true,
       },
     });
-    const semester2 = await prisma.semesters.create({
+    const semester2 = await prisma.semester.create({
       data: {
         academic_year_id: year2.id,
         name: "Second Semester",
@@ -72,7 +72,7 @@ async function main() {
         is_active: false, // Assuming Fall is active
       },
     });
-    const semester3 = await prisma.semesters.create({
+    const semester3 = await prisma.semester.create({
       data: {
         academic_year_id: year1.id, // Link to the previous year
         name: "First Semester",
@@ -86,22 +86,22 @@ async function main() {
     );
 
     // --- 3. Schools ---
-    const school1 = await prisma.schools.create({
+    const school1 = await prisma.school.create({
       data: { name: "School of Electrical Engineering" },
     });
-    const school2 = await prisma.schools.create({
+    const school2 = await prisma.school.create({
       data: { name: "School of Civil Engineering" },
     });
     console.log(`Created schools: ${school1.name}, ${school2.name}`);
 
     // --- 4. Departments ---
-    const dept1 = await prisma.departments.create({
+    const dept1 = await prisma.department.create({
       data: { school_id: school1.id, name: "Computer Science" },
     });
-    const dept2 = await prisma.departments.create({
+    const dept2 = await prisma.department.create({
       data: { school_id: school1.id, name: "Software Engineering" },
     });
-    const dept3 = await prisma.departments.create({
+    const dept3 = await prisma.department.create({
       data: { school_id: school2.id, name: "Civil Engineering" },
     });
     console.log(
@@ -110,7 +110,7 @@ async function main() {
 
     // --- 5. Sections ---
     // Freshman section (year_level 1, no department)
-    const sectionFreshman = await prisma.sections.create({
+    const sectionFreshman = await prisma.section.create({
       data: {
         semester_id: semester1.id,
         year_level: 1,
@@ -119,7 +119,7 @@ async function main() {
       },
     });
     // Year 2 section (linked to a department)
-    const sectionSophomoreCS = await prisma.sections.create({
+    const sectionSophomoreCS = await prisma.section.create({
       data: {
         semester_id: semester1.id,
         department_id: dept1.id,
@@ -127,7 +127,7 @@ async function main() {
         label: "B",
       },
     });
-    const sectionSophomoreEE = await prisma.sections.create({
+    const sectionSophomoreEE = await prisma.section.create({
       data: {
         semester_id: semester1.id,
         department_id: dept2.id,
@@ -179,12 +179,12 @@ async function main() {
     ];
     const students = [];
     for (const student of studentsData) {
-      students.push(await prisma.students.create({ data: student }));
+      students.push(await prisma.student.create({ data: student }));
     }
     console.log(`Created ${students.length} students.`);
 
     // --- 7. Instructors ---
-    const instructor1 = await prisma.instructors.create({
+    const instructor1 = await prisma.instructor.create({
       data: {
         uni_id: "INS/I001/12",
         first_name: "Professor",
@@ -193,7 +193,7 @@ async function main() {
         password: hashedPassword,
       },
     });
-    const instructor2 = await prisma.instructors.create({
+    const instructor2 = await prisma.instructor.create({
       data: {
         uni_id: "INS/I002/12",
         first_name: "Dr.",
@@ -207,7 +207,7 @@ async function main() {
     );
 
     // --- 8. Admins ---
-    const admin1 = await prisma.admins.create({
+    const admin1 = await prisma.admin.create({
       data: {
         uni_id: "ADM/A001/12",
         first_name: "Admin",
@@ -216,7 +216,7 @@ async function main() {
         password: hashedPassword,
       },
     });
-    const admin2 = await prisma.admins.create({
+    const admin2 = await prisma.admin.create({
       data: {
         uni_id: "ADM/A002/12",
         first_name: "Admin",
@@ -228,13 +228,13 @@ async function main() {
     console.log(`Created admins: ${admin1.last_name}, ${admin2.last_name}`);
 
     // --- 9. Courses (3 courses) ---
-    const course1 = await prisma.courses.create({
+    const course1 = await prisma.course.create({
       data: { code: "CS101", title: "Introduction to Programming", credits: 3 },
     });
-    const course2 = await prisma.courses.create({
+    const course2 = await prisma.course.create({
       data: { code: "CS201", title: "Data Structures", credits: 4 },
     });
-    const course3 = await prisma.courses.create({
+    const course3 = await prisma.course.create({
       data: { code: "EE201", title: "Circuit Analysis I", credits: 4 },
     });
     console.log(
@@ -243,7 +243,7 @@ async function main() {
 
     // --- 10. Course Offerings ---
     // Offer CS101 in Freshman Section A, Fall 2024 by Instructor 1
-    const offeringCS101Freshman = await prisma.courseOfferings.create({
+    const offeringCS101Freshman = await prisma.courseOffering.create({
       data: {
         course_id: course1.id,
         semester_id: semester1.id,
@@ -252,7 +252,7 @@ async function main() {
       },
     });
     // Offer CS201 in Sophomore CS Section B, Fall 2024 by Instructor 1
-    const offeringCS201SophomoreCS = await prisma.courseOfferings.create({
+    const offeringCS201SophomoreCS = await prisma.courseOffering.create({
       data: {
         course_id: course2.id,
         semester_id: semester1.id,
@@ -261,7 +261,7 @@ async function main() {
       },
     });
     // Offer EE201 in Sophomore EE Section A, Fall 2024 by Instructor 2
-    const offeringEE201SophomoreEE = await prisma.courseOfferings.create({
+    const offeringEE201SophomoreEE = await prisma.courseOffering.create({
       data: {
         course_id: course3.id,
         semester_id: semester1.id,
@@ -273,7 +273,7 @@ async function main() {
 
     // --- 11. Student–Section Enrollment (Distribute students) ---
     // Enroll students 1 and 2 in Freshman Section A for Fall 2024
-    await prisma.studentSections.createMany({
+    await prisma.enrollment.createMany({
       data: [
         {
           student_id: students[0].id,
@@ -291,7 +291,7 @@ async function main() {
       skipDuplicates: true, // Skip if enrollment already exists
     });
     // Enroll students 3 and 4 in Sophomore CS Section B for Fall 2024
-    await prisma.studentSections.createMany({
+    await prisma.enrollment.createMany({
       data: [
         {
           student_id: students[2].id,
@@ -309,7 +309,7 @@ async function main() {
       skipDuplicates: true,
     });
     // Enroll student 5 in Sophomore EE Section A for Fall 2024
-    await prisma.studentSections.createMany({
+    await prisma.enrollment.createMany({
       data: [
         {
           student_id: students[4].id,
@@ -324,29 +324,26 @@ async function main() {
 
     // --- 12. Attendance Sessions ---
     // Sessions for CS101 in Freshman Section A (offeringCS101Freshman)
-    const session1_cs101 = await prisma.attendanceSessions.create({
+    const session1_cs101 = await prisma.attendanceSession.create({
       data: {
         course_offering_id: offeringCS101Freshman.id,
-        semester_id: semester1.id,
         session_date: new Date("2024-09-10"),
         start_time: new Date("2024-09-10T10:00:00Z"), // Use ISO 8601 format for time
         end_time: new Date("2024-09-10T11:00:00Z"),
       },
     });
-    const session2_cs101 = await prisma.attendanceSessions.create({
+    const session2_cs101 = await prisma.attendanceSession.create({
       data: {
         course_offering_id: offeringCS101Freshman.id,
-        semester_id: semester1.id,
         session_date: new Date("2024-09-12"),
         start_time: new Date("2024-09-12T10:00:00Z"),
         end_time: new Date("2024-09-12T11:00:00Z"),
       },
     });
     // Sessions for CS201 in Sophomore CS Section B (offeringCS201SophomoreCS)
-    const session1_cs201 = await prisma.attendanceSessions.create({
+    const session1_cs201 = await prisma.attendanceSession.create({
       data: {
         course_offering_id: offeringCS201SophomoreCS.id,
-        semester_id: semester1.id,
         session_date: new Date("2024-09-10"),
         start_time: new Date("2024-09-10T14:00:00Z"),
         end_time: new Date("2024-09-10T15:30:00Z"),
@@ -356,7 +353,7 @@ async function main() {
 
     // --- 13. Attendance Records ---
     // Records for students 1 and 2 in CS101 sessions
-    await prisma.attendanceRecords.createMany({
+    await prisma.attendanceRecord.createMany({
       data: [
         {
           session_id: session1_cs101.id,
@@ -382,7 +379,7 @@ async function main() {
       skipDuplicates: true,
     });
     // Records for students 3 and 4 in CS201 sessions
-    await prisma.attendanceRecords.createMany({
+    await prisma.attendanceRecord.createMany({
       data: [
         {
           session_id: session1_cs201.id,

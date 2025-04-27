@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 // Declare a global variable to hold the PrismaClient instance.
 // This prevents multiple instances during development hot-reloading.
 declare global {
-  var prisma: PrismaClient | undefined;
+  var prisma: PrismaClient | undefined; // eslint-disable-line no-var
 }
 
 export const prisma =

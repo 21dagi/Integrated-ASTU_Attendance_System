@@ -7,155 +7,152 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model AcademicYears {
+model AcademicYear {
   id          Int        @id @default(autoincrement())
   name        String     @db.VarChar()
   start_date  DateTime   @db.Date
   end_date    DateTime   @db.Date
   is_active   Boolean    @default(false)
-  semesters   Semesters[]
+  semesters   Semester[]
 
-  @@map("AcademicYears") // Updated to plural
+  @@map("academic_years")
 }
 
-model Semesters {
-  id               Int                  @id @default(autoincrement())
-  academic_year_id Int
-  academicYear     AcademicYears        @relation(fields: [academic_year_id], references: [id],onDelete: Cascade)
-  name             String               @db.VarChar
-  start_date       DateTime             @db.Date
-  end_date         DateTime             @db.Date
-  is_active        Boolean              @default(false)
-  courseOfferings  CourseOfferings[]
-  studentSections  StudentSections[]
-  attendanceSessions AttendanceSessions[]
-  sections Sections[]
+model Semester {
+  id                 Int                @id @default(autoincrement())
+  academic_year_id   Int
+  academicYear       AcademicYear       @relation(fields: [academic_year_id], references: [id], onDelete: Cascade)
+  name               String             @db.VarChar
+  start_date         DateTime           @db.Date
+  end_date           DateTime           @db.Date
+  is_active          Boolean            @default(false)
+  courseOfferings    CourseOffering[]
+  enrollments        Enrollment[]
+  sections           Section[]
 
-  @@map("Semesters") 
+  @@map("semesters")
 }
 
-model Schools {
+model School {
   id          Int          @id @default(autoincrement())
   name        String       @unique @db.VarChar
-  departments Departments[]
+  departments Department[]
 
-  @@map("Schools") 
+  @@map("schools")
 }
 
-model Departments {
+model Department {
   id       Int      @id @default(autoincrement())
   school_id Int?
-  school   Schools?   @relation(fields: [school_id], references: [id],onDelete: SetNull)
+  school   School?  @relation(fields: [school_id], references: [id], onDelete: SetNull)
   name     String   @db.VarChar
-  sections Sections[]
+  sections Section[]
 
-  @@map("Departments") 
+  @@map("departments")
 }
 
-model Sections {
+model Section {
   id               Int                @id @default(autoincrement())
-  department_id    Int?               // NULL for year_level = 1 (freshman)
-  department       Departments?        @relation(fields: [department_id], references: [id],onDelete: Cascade)
+  department_id    Int?
+  department       Department?        @relation(fields: [department_id], references: [id], onDelete: Cascade)
   year_level       Int
   label            String             @db.VarChar
   semester_id      Int
-  semester         Semesters         @relation(fields: [semester_id],references: [id],onDelete: Cascade)
-  courseOfferings  CourseOfferings[]
-  studentSections  StudentSections[]
+  semester         Semester           @relation(fields: [semester_id], references: [id], onDelete: Cascade)
+  courseOfferings  CourseOffering[]
+  enrollments      Enrollment[]
 
-  @@map("Sections") 
+  @@map("sections")
 }
 
-model Students {
-  id              Int              @id @default(autoincrement())
-  uni_id          String           @unique @db.VarChar
-  first_name      String           @db.VarChar
-  last_name       String           @db.VarChar
-  role            String           @default("student") @db.VarChar 
-  email           String           @unique @db.VarChar
-  password        String           @db.VarChar
-  studentSections StudentSections[]
-  attendanceRecords AttendanceRecords[]
+model Student {
+  id                Int                 @id @default(autoincrement())
+  uni_id            String              @unique @db.VarChar
+  first_name        String              @db.VarChar
+  last_name         String              @db.VarChar
+  role              String              @default("student") @db.VarChar
+  email             String              @unique @db.VarChar
+  password          String              @db.VarChar
+  enrollments       Enrollment[]
+  attendanceRecords AttendanceRecord[]
 
-  @@map("Students") 
+  @@map("students")
 }
 
-model Instructors {
+model Instructor {
   id              Int                @id @default(autoincrement())
   uni_id          String             @unique @db.VarChar
   first_name      String             @db.VarChar
   last_name       String             @db.VarChar
   email           String             @unique @db.VarChar
   password        String             @db.VarChar
-  role            String           @default("instructor") @db.VarChar
-  courseOfferings CourseOfferings[]
+  role            String             @default("instructor") @db.VarChar
+  courseOfferings CourseOffering[]
 
-  @@map("Instructors") 
+  @@map("instructors")
 }
 
-model Admins {
+model Admin {
   id         Int    @id @default(autoincrement())
   uni_id     String @unique @db.VarChar
   first_name String @db.VarChar
   last_name  String @db.VarChar
   email      String @unique @db.VarChar
   password   String @db.VarChar
-  role            String           @default("admin") @db.VarChar
+  role       String @default("admin") @db.VarChar
 
-  @@map("Admins") 
+  @@map("admins")
 }
 
-model Courses {
+model Course {
   id              Int              @id @default(autoincrement())
   code            String           @unique @db.VarChar
   title           String           @db.VarChar
   credits         Int
-  courseOfferings CourseOfferings[]
+  courseOfferings CourseOffering[]
 
-  @@map("Courses") 
+  @@map("courses")
 }
 
-model CourseOfferings {
-  id              Int                @id @default(autoincrement())
-  course_id       Int
-  course          Courses             @relation(fields: [course_id], references: [id])
-  semester_id     Int
-  semester        Semesters          @relation(fields: [semester_id], references: [id],onDelete: Cascade)
-  section_id      Int
-  section         Sections           @relation(fields: [section_id], references: [id],onDelete: Cascade)
-  instructor_id   Int?
-  instructor      Instructors?        @relation(fields: [instructor_id], references: [id],onDelete: SetNull)
-  attendanceSessions AttendanceSessions[]
+model CourseOffering {
+  id                 Int                @id @default(autoincrement())
+  course_id          Int
+  course             Course             @relation(fields: [course_id], references: [id])
+  semester_id        Int
+  semester           Semester           @relation(fields: [semester_id], references: [id], onDelete: Cascade)
+  section_id         Int
+  section            Section            @relation(fields: [section_id], references: [id], onDelete: Cascade)
+  instructor_id      Int?
+  instructor         Instructor?        @relation(fields: [instructor_id], references: [id], onDelete: SetNull)
+  attendanceSessions AttendanceSession[]
 
   @@unique([course_id, semester_id, section_id, instructor_id])
-  @@map("CourseOfferings") 
+  @@map("course_offerings")
 }
 
-model StudentSections {
+model Enrollment {
   student_id  Int
-  student     Students  @relation(fields: [student_id], references: [id],onDelete: Cascade)
+  student     Student  @relation(fields: [student_id], references: [id], onDelete: Cascade)
   semester_id Int
-  semester    Semesters @relation(fields: [semester_id], references: [id],onDelete: Cascade)
+  semester    Semester @relation(fields: [semester_id], references: [id], onDelete: Cascade)
   section_id  Int
-  section     Sections  @relation(fields: [section_id], references: [id],onDelete: Cascade)
+  section     Section  @relation(fields: [section_id], references: [id], onDelete: Cascade)
   is_active   Boolean  @default(false)
 
   @@id([student_id, semester_id])
-  @@map("StudentSections") // Updated to plural
+  @@map("enrollments")
 }
 
-model AttendanceSessions {
+model AttendanceSession {
   id                 Int                @id @default(autoincrement())
   course_offering_id Int
-  courseOffering     CourseOfferings    @relation(fields: [course_offering_id], references: [id],onDelete: Cascade)
-  semester_id        Int
-  semester           Semesters          @relation(fields: [semester_id], references: [id],onDelete: Cascade)
+  courseOffering     CourseOffering     @relation(fields: [course_offering_id], references: [id], onDelete: Cascade)
   session_date       DateTime           @db.Date
   start_time         DateTime           @db.Time
   end_time           DateTime           @db.Time
-  attendanceRecords  AttendanceRecords[]
+  attendanceRecords  AttendanceRecord[]
 
-  @@map("AttendanceSessions") // Updated to plural
+  @@map("attendance_sessions")
 }
 
 enum AttendanceStatus {
@@ -164,15 +161,15 @@ enum AttendanceStatus {
   LATE
 }
 
-model AttendanceRecords {
-  id          Int               @id @default(autoincrement())
+model AttendanceRecord {
+  id          Int                @id @default(autoincrement())
   session_id  Int
-  session     AttendanceSessions @relation(fields: [session_id], references: [id],onDelete: Cascade)
+  session     AttendanceSession  @relation(fields: [session_id], references: [id], onDelete: Cascade)
   student_id  Int
-  student     Students           @relation(fields: [student_id], references: [id],onDelete: Cascade)
-  status     AttendanceStatus
-  recorded_at DateTime          @default(now()) @db.Timestamp(3)
+  student     Student            @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  status      AttendanceStatus
+  recorded_at DateTime           @default(now()) @db.Timestamp(3)
 
   @@unique([session_id, student_id])
-  @@map("AttendanceRecords") // Updated to plural
+  @@map("attendance_records")
 }
