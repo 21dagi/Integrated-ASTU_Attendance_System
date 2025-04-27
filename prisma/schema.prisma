@@ -9,6 +9,7 @@ datasource db {
 
 model AcademicYears {
   id          Int        @id @default(autoincrement())
+  name        String     @db.VarChar()
   start_date  DateTime   @db.Date
   end_date    DateTime   @db.Date
   is_active   Boolean    @default(false)
@@ -20,7 +21,7 @@ model AcademicYears {
 model Semesters {
   id               Int                  @id @default(autoincrement())
   academic_year_id Int
-  academicYear     AcademicYears        @relation(fields: [academic_year_id], references: [id])
+  academicYear     AcademicYears        @relation(fields: [academic_year_id], references: [id],onDelete: Cascade)
   name             String               @db.VarChar
   start_date       DateTime             @db.Date
   end_date         DateTime             @db.Date
@@ -28,6 +29,7 @@ model Semesters {
   courseOfferings  CourseOfferings[]
   studentSections  StudentSections[]
   attendanceSessions AttendanceSessions[]
+  sections Sections[]
 
   @@map("Semesters") 
 }
@@ -42,8 +44,8 @@ model Schools {
 
 model Departments {
   id       Int      @id @default(autoincrement())
-  school_id Int
-  school   Schools   @relation(fields: [school_id], references: [id])
+  school_id Int?
+  school   Schools?   @relation(fields: [school_id], references: [id],onDelete: SetNull)
   name     String   @db.VarChar
   sections Sections[]
 
@@ -53,9 +55,11 @@ model Departments {
 model Sections {
   id               Int                @id @default(autoincrement())
   department_id    Int?               // NULL for year_level = 1 (freshman)
-  department       Departments?        @relation(fields: [department_id], references: [id])
+  department       Departments?        @relation(fields: [department_id], references: [id],onDelete: Cascade)
   year_level       Int
   label            String             @db.VarChar
+  semester_id      Int
+  semester         Semesters         @relation(fields: [semester_id],references: [id],onDelete: Cascade)
   courseOfferings  CourseOfferings[]
   studentSections  StudentSections[]
 
@@ -116,11 +120,11 @@ model CourseOfferings {
   course_id       Int
   course          Courses             @relation(fields: [course_id], references: [id])
   semester_id     Int
-  semester        Semesters          @relation(fields: [semester_id], references: [id])
+  semester        Semesters          @relation(fields: [semester_id], references: [id],onDelete: Cascade)
   section_id      Int
-  section         Sections           @relation(fields: [section_id], references: [id])
-  instructor_id   Int
-  instructor      Instructors        @relation(fields: [instructor_id], references: [id])
+  section         Sections           @relation(fields: [section_id], references: [id],onDelete: Cascade)
+  instructor_id   Int?
+  instructor      Instructors?        @relation(fields: [instructor_id], references: [id],onDelete: SetNull)
   attendanceSessions AttendanceSessions[]
 
   @@unique([course_id, semester_id, section_id, instructor_id])
@@ -129,11 +133,11 @@ model CourseOfferings {
 
 model StudentSections {
   student_id  Int
-  student     Students  @relation(fields: [student_id], references: [id])
+  student     Students  @relation(fields: [student_id], references: [id],onDelete: Cascade)
   semester_id Int
-  semester    Semesters @relation(fields: [semester_id], references: [id])
+  semester    Semesters @relation(fields: [semester_id], references: [id],onDelete: Cascade)
   section_id  Int
-  section     Sections  @relation(fields: [section_id], references: [id])
+  section     Sections  @relation(fields: [section_id], references: [id],onDelete: Cascade)
   is_active   Boolean  @default(false)
 
   @@id([student_id, semester_id])
@@ -143,9 +147,9 @@ model StudentSections {
 model AttendanceSessions {
   id                 Int                @id @default(autoincrement())
   course_offering_id Int
-  courseOffering     CourseOfferings    @relation(fields: [course_offering_id], references: [id])
+  courseOffering     CourseOfferings    @relation(fields: [course_offering_id], references: [id],onDelete: Cascade)
   semester_id        Int
-  semester           Semesters          @relation(fields: [semester_id], references: [id])
+  semester           Semesters          @relation(fields: [semester_id], references: [id],onDelete: Cascade)
   session_date       DateTime           @db.Date
   start_time         DateTime           @db.Time
   end_time           DateTime           @db.Time
@@ -163,9 +167,9 @@ enum AttendanceStatus {
 model AttendanceRecords {
   id          Int               @id @default(autoincrement())
   session_id  Int
-  session     AttendanceSessions @relation(fields: [session_id], references: [id])
+  session     AttendanceSessions @relation(fields: [session_id], references: [id],onDelete: Cascade)
   student_id  Int
-  student     Students           @relation(fields: [student_id], references: [id])
+  student     Students           @relation(fields: [student_id], references: [id],onDelete: Cascade)
   status     AttendanceStatus
   recorded_at DateTime          @default(now()) @db.Timestamp(3)
 

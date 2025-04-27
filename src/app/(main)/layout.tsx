@@ -4,7 +4,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <main className="flex min-h-screen">
+    <main className="flex min-h-screen font-[family-name:var(--font-geist-sans)]">
       <SidebarProvider>
         <AppSidebar />
         <div className="flex flex-col flex-1">
