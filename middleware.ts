@@ -6,10 +6,10 @@ export async function middleware(req: NextRequest) {
   console.log("Middleware executed for:", req.nextUrl.pathname);
 
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
-  console.log("Token:", token); // Debug log
+  console.log("Token:", token); 
 
-  // Define the protected routes
-  const protectedRoutes = ["/"]; // Protect the home page
+  
+  const protectedRoutes = ["/"];
 
   // Check if the current route is protected
   const isProtectedRoute = protectedRoutes.some((route) =>
