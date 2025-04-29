@@ -6,8 +6,6 @@ import bcrypt from "bcrypt";
 const prisma = global.prisma || new PrismaClient();
 if (process.env.NODE_ENV !== "production") global.prisma = prisma;
 
-console.log("NEXTAUTH_URL:", process.env.NEXTAUTH_URL);
-
 export const authConfig: AuthOptions = {
   providers: [
     Credentials({
