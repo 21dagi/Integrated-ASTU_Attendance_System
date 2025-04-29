@@ -44,12 +44,11 @@ export const authConfig: AuthOptions = {
   ],
   callbacks: {
     async redirect({ url, baseUrl }) {
-      // Redirect to the home page after successful login
+ 
       if (url === "/api/auth/signin") {
         return "/";
       }
 
-      // Allow redirection to other internal URLs
       if (url.startsWith(baseUrl)) {
         return url;
       }
