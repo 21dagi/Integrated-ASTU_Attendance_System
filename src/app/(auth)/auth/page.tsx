@@ -1,14 +1,14 @@
 import React from "react";
 
-const AuthPage = () => {
+export default function LoginPage() {
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-4xl font-bold">Welcome to Attendance System</h1>
-      <p className="text-muted-foreground">
-        This is the auth page login or signup
-      </p>
-    </div>
+    <main className="flex items-center justify-center md:h-screen">
+      <div className="relative mx-auto flex w-full max-w-[400px] flex-col space-y-2.5 p-4 md:-mt-32">
+        <div className="flex h-20 w-full items-end rounded-lg bg-blue-500 p-3 md:h-36">
+          <div className="w-32 text-white md:w-36"></div>
+        </div>
+        {/* <LoginForm /> */}
+      </div>
+    </main>
   );
-};
-
-export default AuthPage;
+}
