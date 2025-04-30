@@ -70,7 +70,9 @@ model Student {
   uni_id            String             @unique @db.VarChar
   first_name        String             @db.VarChar
   last_name         String             @db.VarChar
+  image             String?            @default("https://randomuser.me/api/portraits/men/73.jpg")
   role              String             @default("student") @db.VarChar
+  gender            GenderType?
   email             String             @unique @db.VarChar
   password          String             @db.VarChar
   attendanceRecords AttendanceRecord[]
@@ -84,6 +86,8 @@ model Instructor {
   uni_id          String           @unique @db.VarChar
   first_name      String           @db.VarChar
   last_name       String           @db.VarChar
+  image           String?          @default("https://randomuser.me/api/portraits/men/91.jpg")
+  gender            GenderType?
   email           String           @unique @db.VarChar
   password        String           @db.VarChar
   role            String           @default("instructor") @db.VarChar
@@ -98,8 +102,11 @@ model Admin {
   first_name String @db.VarChar
   last_name  String @db.VarChar
   email      String @unique @db.VarChar
+  gender            GenderType?
+  image      String?@default("https://randomuser.me/api/portraits/men/54.jpg")
   password   String @db.VarChar
   role       String @default("admin") @db.VarChar
+
 
   @@map("admins")
 }
@@ -172,4 +179,8 @@ enum AttendanceStatus {
   PRESENT
   ABSENT
   LATE
+}
+enum GenderType {
+  M
+  F
 }
