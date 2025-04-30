@@ -1,4 +1,4 @@
 import NextAuth from "next-auth";
-import { authConfig } from "../../../src/auth.config"; // Corrected path
+import { authConfig } from "@/lib/auth.config";
 
 export default NextAuth(authConfig);

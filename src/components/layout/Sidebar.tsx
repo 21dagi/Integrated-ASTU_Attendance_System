@@ -1,3 +1,4 @@
+"use client";
 import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
 
 import {
@@ -10,6 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useSession } from "next-auth/react";
 
 // Menu items.
 const items = [
@@ -41,6 +43,7 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const { data } = useSession();
   return (
     <Sidebar variant="sidebar">
       <SidebarContent className="pt-5">
@@ -61,6 +64,25 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        {data?.user.role === "instructor" && (
+          <SidebarGroup>
+            <SidebarGroupLabel>student</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {items.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <a href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
     </Sidebar>
   );
