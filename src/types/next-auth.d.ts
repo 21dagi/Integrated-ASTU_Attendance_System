@@ -6,7 +6,7 @@ declare module "next-auth" {
       id: number;
       name: string;
       role: "admin" | "instructor" | "student";
-      image?: string;
+      image: string;
     };
   }
 
@@ -14,6 +14,6 @@ declare module "next-auth" {
     id: number;
     role: string; // Add custom fields from your database
     name: string;
-    image?: string;
+    image: string | null;
   }
 }

@@ -52,6 +52,7 @@ export const authConfig: AuthOptions = {
             email: user.email,
             name: full_name,
             role: user.role as ROLE,
+            image: user.image ?? "",
           };
         } catch (error) {
           throw new Error("Default");
@@ -75,12 +76,14 @@ export const authConfig: AuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.picture = user.image;
       }
       return token;
     },
     session({ session, token }) {
       if (token) {
         session.user.role = token.role as ROLE;
+        session.user.image = token.picture ?? "";
       }
 
       return session;
