@@ -79,9 +79,8 @@ const menuItems = [
     icon: FileText,
     url: "#",
     items: [
-      { title: "Student Reports", url: "#" },
-      { title: "Teacher Reports", url: "#" },
-      { title: "Financial Reports", url: "#" },
+      { title: "Student Reports", url: "#" }
+      
     ]
   },
   {
@@ -90,7 +89,6 @@ const menuItems = [
     url: "#",
     items: [
       { title: "System Settings", url: "#" },
-      { title: "User Management", url: "#" },
     ]
   }
 ]

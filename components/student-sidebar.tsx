@@ -41,11 +41,7 @@ const menuItems = [
     title: "Students",
     icon: Users,
     url: "#",
-    items: [
-      { title: "All Students", url: "#" },
-      { title: "Admission", url: "#" },
-      { title: "Attendance", url: "#" },
-    ]
+    items: []
   },
   
   {
@@ -59,6 +55,14 @@ const menuItems = [
     ]
   },
   {
+    title: "Attendance",
+    icon: FileText,
+    url: "#",
+    items: [
+      
+    ]
+  },
+  {
     title: "Examination",
     icon: ClipboardList,
     url: "#",
@@ -68,22 +72,14 @@ const menuItems = [
       { title: "Marks", url: "#" },
     ]
   },
+  
   {
     title: "Calendar",
     icon: Calendar,
     url: "#",
     items: []
   },
-  {
-    title: "Reports",
-    icon: FileText,
-    url: "#",
-    items: [
-      { title: "Student Reports", url: "#" },
-      { title: "Teacher Reports", url: "#" },
-      { title: "Financial Reports", url: "#" },
-    ]
-  },
+  
   {
     title: "Settings",
     icon: Settings,
@@ -96,8 +92,6 @@ const menuItems = [
 ]
 
 const bottomMenuItems = [
-  { title: "Messages", icon: Mail, url: "#" },
-  { title: "Notifications", icon: Bell, url: "#" },
   { title: "Help", icon: HelpCircle, url: "#" },
   { title: "Logout", icon: LogOut, url: "#" }
 ]

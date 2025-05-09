@@ -48,7 +48,7 @@ export function AllTeachersContent() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {Array.from({ length: 5 }).map((_, i) => (
+              {Array.from({ length: 15 }).map((_, i) => (
                 <TableRow key={i}>
                   <TableCell>TCH-{2000 + i}</TableCell>
                   <TableCell>Dr. Teacher Name {i + 1}</TableCell>

@@ -22,17 +22,33 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
   const router = useRouter()
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!role) {
-      alert("Please select your role")
-      return
+      alert("Please select your role");
+      return;
     }
-    
-    setIsLoading(true)
+  
+    setIsLoading(true);
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 500))
-    router.push(`/${role}/adminUI`)
-  }
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  
+    // Redirect based on role
+    switch (role) {
+      case "admin":
+        router.push("/admin/adminUI");
+        break;
+      case "employee":
+        router.push("/employee/dashboard");
+        break;
+      case "student":
+        router.push("/student/dashboard");
+        break;
+      default:
+        alert("Invalid role selected");
+        setIsLoading(false);
+        return;
+    }
+  };
 
   return (
     <div className={cn("max-w-md w-full mx-auto", className)} {...props}>

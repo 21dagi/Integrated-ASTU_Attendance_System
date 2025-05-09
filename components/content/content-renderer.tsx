@@ -13,12 +13,15 @@ export function ContentRenderer({ selectedItem }: ContentRendererProps) {
       return <DashboardContent />
     case "all-students":
       return <AllStudentsContent />
+    case "student-attendance":
+      return <AllStudentsContent/>
     case "admission":
       return <AdmissionContent />
     case "all-teachers":
       return <AllTeachersContent />
     case "attendance":
       return <AllTeachersContent />
+    
     default:
       return (
         <div className="flex items-center justify-center h-full">
