@@ -31,6 +31,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
+import { Shield } from "lucide-react";
 
 // Define menu items with unique IDs
 const menuItems = [
@@ -42,85 +43,57 @@ const menuItems = [
     items: [],
   },
   {
-    id: "students",
-    title: "Students",
-    icon: Users,
-    url: "#",
-    items: [
-      { id: "all-students", title: "All Students", url: "#" },
-      { id: "admission", title: "Admission", url: "#" },
+  id: "Administrator",
+  title: "Administrator",
+  icon: Shield, // Use the Shield icon from lucide-react
+  url: "#",
+  items: [
+    { id: "all-students", title: "All Students", url: "#" },
       { id: "student-attendance", title: "Attendance", url: "#" },
-      { id: "promotion", title: "Promotion", url: "#" },
+      { id: "all-teachers", title: "All Teachers", url: "#" },
+      { id: "student-reports", title: "Student Reports", url: "#" },
+      { id: "teacher-reports", title: "Teacher Reports", url: "#" },
+      { id: "financial-reports", title: "Financial Reports", url: "#" },
+      { id: "leave-requests", title: "Leave Requests", url: "#" },
+  
     ],
-  },
+},
   {
     id: "teachers",
     title: "Teachers",
     icon: Users,
     url: "#",
     items: [
-      { id: "all-teachers", title: "All Teachers", url: "#" },
+      { id: "all-students", title: "All students", url: "#" },
+      { id: "courses", title: "Courses", url: "#" },
       { id: "attendance", title: "Attendance", url: "#" },
-      { id: "leave-requests", title: "Leave Requests", url: "#" },
-    ],
-  },
-  {
-    id: "classes",
-    title: "Classes",
-    icon: BookOpen,
-    url: "#",
-    items: [
-      { id: "all-classes", title: "All Classes", url: "#" },
-      { id: "class-routine", title: "Class Routine", url: "#" },
-      { id: "subjects", title: "Subjects", url: "#" },
-    ],
-  },
-  {
-    id: "examination",
-    title: "Examination",
-    icon: ClipboardList,
-    url: "#",
-    items: [
-      { id: "exam-schedule", title: "Exam Schedule", url: "#" },
-      { id: "grades", title: "Grades", url: "#" },
-      { id: "marks", title: "Marks", url: "#" },
-    ],
-  },
-  {
-    id: "calendar",
-    title: "Calendar",
-    icon: Calendar,
-    url: "#",
-    items: [],
-  },
-  {
-    id: "reports",
-    title: "Reports",
-    icon: FileText,
-    url: "#",
-    items: [
+     { id: "courses", title: "Courses", url: "#" },
+     { id: "leave-requests", title: "Leave Requests", url: "#" },
       { id: "student-reports", title: "Student Reports", url: "#" },
-      { id: "teacher-reports", title: "Teacher Reports", url: "#" },
-      { id: "financial-reports", title: "Financial Reports", url: "#" },
+    
     ],
   },
   {
-    id: "settings",
-    title: "Settings",
-    icon: Settings,
+    id: "students",
+    title: "Students",
+    icon: Users,
     url: "#",
+    
     items: [
-      { id: "system-settings", title: "System Settings", url: "#" },
-      { id: "user-management", title: "User Management", url: "#" },
+      { id: "courses", title: "courses", url: "#" },
+
+      { id: "Attendance", title: "Attendance", url: "#" },
     ],
   },
 ]
 
 const bottomMenuItems = [
-  { id: "messages", title: "Messages", icon: Mail, url: "#" },
   { id: "notifications", title: "Notifications", icon: Bell, url: "#" },
   { id: "help", title: "Help", icon: HelpCircle, url: "#" },
+  {id: "settings",title: "Settings",icon: Settings,url: "#"},
+  
   { id: "logout", title: "Logout", icon: LogOut, url: "#" },
+
 ]
 
 export function AppSidebar({

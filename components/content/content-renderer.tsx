@@ -2,6 +2,7 @@ import AllStudentsContent from "@/app/admin/dashboard/students/page"
 import  AdmissionContent from "@/app/admin/dashboard/students/admission/page"
 import { DashboardContent } from "@/app/admin/dashboard/page"
 import { AllTeachersContent } from "@/app/admin/dashboard/teachers/allteachers/page"
+import { CoursesPage } from "@/app/admin/dashboard/teachers/courses/page"
 interface ContentRendererProps {
   selectedItem: string
 }
@@ -21,7 +22,8 @@ export function ContentRenderer({ selectedItem }: ContentRendererProps) {
       return <AllTeachersContent />
     case "attendance":
       return <AllTeachersContent />
-    
+    case "courses":
+      return <CoursesPage />
     default:
       return (
         <div className="flex items-center justify-center h-full">
