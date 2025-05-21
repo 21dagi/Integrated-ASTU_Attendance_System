@@ -89,3 +89,32 @@ export type StudentClassesResponse = {
   enrollments: StudentEnrollmentDetail[];
   summary: EnrollmentSummary;
 };
+
+export type CourseDetails = {
+  course_code: string;
+  course_title: string;
+  section: string; // e.g., "A", "B"
+  instructor: string;
+};
+
+export type AttendanceSummary = {
+  total_sessions: number;
+  present_count: number;
+  absent_count: number;
+  late_count: number;
+  attendance_rate: number; // Percentage, e.g., 66.666
+};
+export type AttendanceRecordDetail = {
+  session_id: number;
+  date: string;
+  start_time: string;
+  end_time: string;
+  status: string;
+  recorded_at: string | null;
+};
+
+export type StudentAttendanceResponse = {
+  course_details: CourseDetails;
+  attendance_summary: AttendanceSummary;
+  attendance_records: AttendanceRecordDetail[];
+};

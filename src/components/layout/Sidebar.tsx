@@ -1,5 +1,13 @@
 "use client";
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import {
+  Calendar,
+  Home,
+  Users,
+  BookOpen,
+  ClipboardCheck,
+  School,
+  UserCheck,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -7,75 +15,150 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useSession } from "next-auth/react";
-
-// Menu items.
-const items = [
+import Link from "next/link";
+import Image from "next/image";
+// Menu items for different roles
+const studentItems = [
   {
     title: "Home",
-    url: "#",
+    url: "/home",
     icon: Home,
   },
   {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
+    title: "Classes",
+    url: "/student/classes",
+    icon: BookOpen,
+  },
+];
+
+const instructorItems = [
+  {
+    title: "Home",
+    url: "/home",
+    icon: Home,
   },
   {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
+    title: "Take Attendance",
+    url: "/instructor/take-attendance",
+    icon: ClipboardCheck,
   },
   {
-    title: "Search",
-    url: "#",
-    icon: Search,
+    title: "Classes",
+    url: "/instructor/classes",
+    icon: School,
   },
   {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
+    title: "Attendance Records",
+    url: "/instructor/attendance",
+    icon: UserCheck,
+  },
+];
+
+const adminItems = [
+  {
+    title: "Home",
+    url: "/home",
+    icon: Home,
+  },
+  {
+    title: "Classes",
+    url: "/admin/classes",
+    icon: School,
+  },
+  {
+    title: "Students",
+    url: "/admin/students",
+    icon: Users,
+  },
+  {
+    title: "Instructors",
+    url: "/admin/instructors",
+    icon: Users,
+  },
+  {
+    title: "Attendance",
+    url: "/admin/attendance",
+    icon: UserCheck,
   },
 ];
 
 export function AppSidebar() {
-  const { data } = useSession();
+  const { data: session } = useSession();
+  const userRole = session?.user?.role;
+
   return (
     <Sidebar variant="sidebar">
+      <SidebarHeader className="flex items-center gap-2 px-6 py-4 border-b">
+        <div className="flex items-center gap-2">
+          <Image
+            src="/cube.png"
+            alt="Company Logo"
+            width={100}
+            height={100}
+            className="size-10 object-cover bg-transparent"
+          />
+          <span className="font-semibo text-lg">Jotion</span>
+        </div>
+      </SidebarHeader>
       <SidebarContent className="pt-5">
-        <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        {data?.user.role === "instructor" && (
+        {userRole === "student" && (
           <SidebarGroup>
-            <SidebarGroupLabel>student</SidebarGroupLabel>
+            <SidebarGroupLabel>Student Dashboard</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {items.map((item) => (
+                {studentItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <a href={item.url}>
+                      <Link href={item.url}>
                         <item.icon />
                         <span>{item.title}</span>
-                      </a>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
+
+        {userRole === "instructor" && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Instructor Dashboard</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {instructorItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
+
+        {userRole === "admin" && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Admin Dashboard</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {adminItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
