@@ -82,6 +82,7 @@ export const authConfig: AuthOptions = {
     },
     session({ session, token }) {
       if (token) {
+        session.user.id = token.id as number;
         session.user.role = token.role as ROLE;
         session.user.image = token.picture ?? "";
       }
