@@ -71,7 +71,7 @@ export const ClassCard = ({
               </span>
             </div>
             <Button asChild size="sm" variant="outline">
-              <Link href={`/student/courses/${offering_id}`}>
+              <Link href={`/student/attendance/${offering_id}`}>
                 <span>View Details</span>
                 <ExternalLink className="ml-1 h-3 w-3" />
               </Link>

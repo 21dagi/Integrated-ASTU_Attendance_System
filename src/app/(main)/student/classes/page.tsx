@@ -6,6 +6,16 @@ import { ClassListSkeleton } from "./_components/ClassListSkeleton";
 
 export default function StudentClassesPage() {
   const { data, isLoading, error } = useGetStudentClasses();
+  const colors = [
+    "bg-blue-500",
+    "bg-green-500",
+    "bg-red-500",
+    "bg-yellow-500",
+    "bg-purple-500",
+    "bg-orange-500",
+    "bg-pink-500",
+    "bg-gray-500",
+  ];
 
   if (isLoading) {
     return <ClassListSkeleton />;
@@ -14,7 +24,9 @@ export default function StudentClassesPage() {
   if (error) {
     return (
       <div className="flex items-center justify-center h-[calc(100vh-4rem)]">
-        <p className="text-muted-foreground">Error loading classes</p>
+        <p className="text-muted-foreground text-red-500">
+          Error loading classes
+        </p>
       </div>
     );
   }
@@ -27,7 +39,7 @@ export default function StudentClassesPage() {
   const classes = data.enrollments.flatMap((enrollment) =>
     enrollment.courses.map((course) => ({
       ...course,
-      colorClass: "bg-blue-500", // You can add logic to assign different colors
+      colorClass: colors[Math.floor(Math.random() * colors.length)],
     }))
   );
 
