@@ -13,6 +13,7 @@ import { signOut } from "next-auth/react";
 import { Button } from "./ui/button";
 import { LogOutIcon } from "lucide-react";
 import { User } from "next-auth";
+import UserAvatar from "./UserAvatar";
 interface NavAvatarProps {
   user: User | undefined;
   onClick?: () => void;
@@ -20,19 +21,12 @@ interface NavAvatarProps {
 export const NavAvatar = ({ user }: NavAvatarProps) => {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <div className="flex items-center gap-2 cursor-pointer hover:bg-slate-50 rounded-md p-1">
-          <div className="flex items-center gap-2">
-            <Avatar>
-              <AvatarImage src={user?.image ?? ""} />
-              <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col">
-              <p className="text-sm font-medium">{user?.name}</p>
-              <p className="text-sm text-zinc-500 capitalize">{user?.role}</p>
-            </div>
-          </div>
-        </div>
+      <DropdownMenuTrigger className="outline-none">
+        <UserAvatar
+          lable={user?.role ?? ""}
+          image={user?.image ?? ""}
+          name={user?.name ?? ""}
+        />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem>

@@ -15,6 +15,7 @@ type EnrolledCourseDetail = {
   total_sessions: number;
   attendance_rate: number;
 };
+
 type UpcomingSessionDetail = {
   course_code: string;
   course_title: string;
@@ -34,4 +35,57 @@ export type StudentDashboardResponse = {
   enrolled_courses: EnrolledCourseDetail[];
   upcoming_sessions: UpcomingSessionDetail[];
   recent_activity: RecentActivityDetail[];
+};
+
+export type CurrentSemesterDetail = {
+  name: string;
+  academic_year: string;
+  start_date: string;
+  end_date: string;
+};
+export type EnrolledCourseWithDetails = {
+  offering_id: number;
+  course: {
+    code: string;
+    title: string;
+    credits: number;
+  };
+  instructor: {
+    name: string;
+    uni_id: string;
+    image: string;
+  };
+  attendance: {
+    total_sessions: number;
+    present_count: number;
+    attendance_rate: number;
+    last_session: {
+      date: string;
+      start_time: string;
+      end_time: string;
+      status: string;
+    };
+  };
+};
+export type StudentEnrollmentDetail = {
+  enrollment_id: number;
+  section: {
+    id: number;
+    label: string; // e.g., "A", "B"
+    year_level: number; // e.g., 1, 2, 3
+  };
+  is_active: boolean;
+  courses: EnrolledCourseWithDetails[];
+};
+
+export type EnrollmentSummary = {
+  total_sections: number;
+  total_courses: number;
+  active_enrollments: number;
+};
+
+export type StudentClassesResponse = {
+  current_semester: CurrentSemesterDetail;
+  enrollments: StudentEnrollmentDetail[];
+  summary: EnrollmentSummary;
 };

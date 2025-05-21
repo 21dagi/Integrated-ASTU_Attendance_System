@@ -1,4 +1,4 @@
-import { useGetStudentOverview } from "@/api/get-student-overview";
+import { useGetStudentOverview } from "@/api/student";
 import { OverviewCard } from "@/components/dashboard/OverviewCard";
 import { CourseCard } from "@/components/dashboard/CourseCard";
 import { ActivityList } from "@/components/dashboard/ActivityList";

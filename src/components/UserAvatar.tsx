@@ -1,4 +1,4 @@
-import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 interface UserAvatarProps {
   name: string;
@@ -16,7 +16,7 @@ const UserAvatar = ({ name, lable, image }: UserAvatarProps) => {
         </Avatar>
         <div className="flex flex-col">
           <p className="text-sm font-medium">{name}</p>
-          {lable && <p className="text-sm text-zinc-500 capitalize">{lable}</p>}
+          <p className="text-sm text-zinc-500 capitalize">{lable}</p>
         </div>
       </div>
     </div>
