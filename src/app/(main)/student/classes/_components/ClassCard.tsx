@@ -26,7 +26,12 @@ export const ClassCard = ({
   className,
 }: ClassCardProps) => {
   return (
-    <Card className={cn("overflow-hidden shrink-0", className)}>
+    <Card
+      className={cn(
+        "overflow-hidden shrink-0 max-w-sm min-w-[290px]",
+        className
+      )}
+    >
       <div className={cn("h-2", colorClass)} />
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start">

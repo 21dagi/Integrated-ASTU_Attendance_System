@@ -8,7 +8,7 @@ interface UserAvatarProps {
 
 const UserAvatar = ({ name, lable, image }: UserAvatarProps) => {
   return (
-    <div className="flex items-center gap-2 cursor-pointer hover:bg-slate-50 rounded-md p-1">
+    <div className="flex items-center gap-2 cursor-pointer hover:bg-accent rounded-md p-1">
       <div className="flex items-center gap-2">
         <Avatar>
           <AvatarImage src={image ?? ""} />

@@ -10,7 +10,9 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
         <SidebarInset>
           <Navbar />
-          <div className="flex-1 overflow-auto p-4 md:p-8">{children}</div>
+          <div className="flex-1 overflow-auto p-4 md:px-[7vw] md:p-8">
+            {children}
+          </div>
         </SidebarInset>
       </div>
     </SidebarProvider>

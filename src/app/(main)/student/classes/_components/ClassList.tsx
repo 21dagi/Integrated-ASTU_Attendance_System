@@ -27,7 +27,7 @@ export const ClassList = ({ classes, className }: ClassListProps) => {
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search classes..."
-            className="pl-8"
+            className="pl-8 max-w-[300px]"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />

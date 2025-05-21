@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { DotIcon, Loader2, LogOutIcon } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
 import { StudentDashboard } from "./_components/StudentDashboard";
+import AdminDashboard from "./_components/AdminDashboard";
+import InstructorDashboard from "./_components/InstructorDashboard";
 
 const HomePage = () => {
   const { data, status } = useSession();
@@ -15,25 +17,9 @@ const HomePage = () => {
   }
   return (
     <div className="w-full h-full top-16">
-      {data?.user.role == "student" ? (
-        <StudentDashboard />
-      ) : (
-        <>
-          <h1>Home</h1>
-          <p>
-            Hello, {data?.user.name} <DotIcon className="inline" />{" "}
-            {data?.user.role}
-          </p>
-          <Button
-            variant={"outline"}
-            className="hover:bg-red-50"
-            onClick={() => signOut()}
-          >
-            signOut
-            <LogOutIcon />
-          </Button>
-        </>
-      )}
+      {data?.user.role == "student" && <StudentDashboard />}
+      {data?.user.role == "admin" && <AdminDashboard />}
+      {data?.user.role == "instructor" && <InstructorDashboard />}
     </div>
   );
 };

@@ -99,8 +99,8 @@ export function AppSidebar() {
           <Image
             src="/cube.png"
             alt="Company Logo"
-            width={100}
-            height={100}
+            width={40}
+            height={40}
             className="size-10 object-cover bg-transparent"
           />
           <span className="font-semibo text-lg">Jotion</span>
