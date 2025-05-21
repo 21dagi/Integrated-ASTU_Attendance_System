@@ -1,13 +1,12 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { signOut } from "next-auth/react";
 import { SidebarTrigger } from "../ui/sidebar";
-import { Button } from "../ui/button";
-import { LogOutIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-
+import { NavAvatar } from "@/components/nav-avatar";
+import { useSession } from "next-auth/react";
 const Navbar = () => {
+  const { data } = useSession();
   return (
     <div className="w-full z-50 flex justify-between items-center p-4 md:px-8 h-16 bg-zinc-50 text-slate-900">
       <div className="text-2xl font-bold text-zinc-900">
@@ -23,14 +22,7 @@ const Navbar = () => {
           </Link>
         </div>
       </div>
-      <Button
-        variant={"outline"}
-        className="hover:bg-slate-50"
-        onClick={() => signOut()}
-      >
-        signOut
-        <LogOutIcon />
-      </Button>
+      <NavAvatar user={data?.user} />
     </div>
   );
 };
