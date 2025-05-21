@@ -11,7 +11,7 @@ export function cn(...inputs: ClassValue[]) {
  * @returns Formatted time string (hh:mm AM/PM)
  */
 export function formatTime(date: Date): string {
-  return date.toLocaleTimeString("en-US", {
+  return new Date(date).toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
