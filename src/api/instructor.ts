@@ -18,6 +18,7 @@ export const useGetInstructorOverview = () => {
 
 export const useCreateSession = () => {
   return useMutation({
+    mutationKey: ["create:session"],
     mutationFn: async (params: {
       id: number;
       data: z.infer<typeof createSessionFormSchema>;

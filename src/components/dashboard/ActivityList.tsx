@@ -6,7 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ActivityItem {
   course: string;
-  status: string;
+  status: string | null;
   date: string;
   recorded_at: string;
   student?: {
@@ -22,7 +22,7 @@ interface ActivityListProps {
   className?: string;
 }
 
-const getStatusColor = (status: string) => {
+const getStatusColor = (status: string | null) => {
   switch (status) {
     case "PRESENT":
       return "text-green-600";

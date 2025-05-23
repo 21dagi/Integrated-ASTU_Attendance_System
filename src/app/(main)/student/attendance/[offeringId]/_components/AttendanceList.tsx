@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StudentAttendanceResponse } from "@/types/api";
-import { cn, formatDateTime } from "@/lib/utils";
+import { cn, formatDateTime, formatTime } from "@/lib/utils";
+import { format } from "date-fns";
 
 interface AttendanceListProps {
   records: StudentAttendanceResponse["attendance_records"];
@@ -39,10 +40,11 @@ export const AttendanceList = ({ records }: AttendanceListProps) => {
               >
                 <div className="space-y-1">
                   <p className="text-sm font-medium">
-                    {formatDateTime(new Date(record.date))}
+                    {format(record.date, "EEE MMM dd, yyyy")}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {record.start_time} - {record.end_time}
+                    {format(record.start_time, "hh:mm")} -{" "}
+                    {format(record.end_time, "hh:mm")}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -56,7 +58,7 @@ export const AttendanceList = ({ records }: AttendanceListProps) => {
                   </span>
                   {record.recorded_at && (
                     <span className="text-xs text-muted-foreground">
-                      Recorded: {formatDateTime(new Date(record.recorded_at))}
+                      Recorded: {formatTime(new Date(record.recorded_at))}
                     </span>
                   )}
                 </div>

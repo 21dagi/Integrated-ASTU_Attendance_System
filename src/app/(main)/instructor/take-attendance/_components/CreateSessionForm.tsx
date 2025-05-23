@@ -30,6 +30,24 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { AxiosError } from "axios";
 
+interface ClassDisplayProps {
+  class_: InstructorClassesResponse;
+}
+
+const ClassDisplay = ({ class_: classInfo }: ClassDisplayProps) => {
+  return (
+    <div className="flex flex-col">
+      <span className="font-medium">
+        {classInfo.course.code} - {classInfo.course.title}
+      </span>
+      <span className="text-sm text-muted-foreground">
+        {classInfo.semester.academic_year} {classInfo.semester.name} - Year{" "}
+        {classInfo.section.year_level} Section - {classInfo.section.label}
+      </span>
+    </div>
+  );
+};
+
 interface CreateSessionFormProps {
   classes: InstructorClassesResponse[];
 }
@@ -38,6 +56,8 @@ export const CreateSessionForm = ({ classes }: CreateSessionFormProps) => {
   const router = useRouter();
   const createSession = useCreateSession();
   const [selectedClassId, setSelectedClassId] = useState<number>(classes[0].id);
+
+  const selectedClass = classes.find((c) => c.id === selectedClassId);
 
   const form = useForm<CreateSessionFormData>({
     resolver: zodResolver(createSessionFormSchema),
@@ -90,16 +110,16 @@ export const CreateSessionForm = ({ classes }: CreateSessionFormProps) => {
             value={selectedClassId.toString()}
           >
             <FormControl>
-              <SelectTrigger>
-                <SelectValue placeholder="Select a class" />
+              <SelectTrigger className="py-6">
+                <SelectValue>
+                  {selectedClass && <ClassDisplay class_={selectedClass} />}
+                </SelectValue>
               </SelectTrigger>
             </FormControl>
             <SelectContent>
               {classes.map((class_) => (
                 <SelectItem key={class_.id} value={class_.id.toString()}>
-                  {class_.course.code} - {class_.course.title}
-                  {class_.semester.academic_year} {class_.semester.name} YEAR -{" "}
-                  {class_.section.year_level} {class_.section.label}
+                  <ClassDisplay class_={class_} />
                 </SelectItem>
               ))}
             </SelectContent>
@@ -118,14 +138,12 @@ export const CreateSessionForm = ({ classes }: CreateSessionFormProps) => {
                   {...field}
                   value={field.value || ""}
                   min={
-                    new Date(
-                      classes.find(
-                        (c) => c.id === selectedClassId
-                      )!.semester.start_date
-                    )
-                      .toISOString()
-                      .split("T")[0]
-                  } // Prevent selecting past dates
+                    selectedClass
+                      ? new Date(selectedClass.semester.start_date)
+                          .toISOString()
+                          .split("T")[0]
+                      : undefined
+                  }
                 />
               </FormControl>
               <FormMessage />
