@@ -118,3 +118,51 @@ export type StudentAttendanceResponse = {
   attendance_summary: AttendanceSummary;
   attendance_records: AttendanceRecordDetail[];
 };
+
+export type InstructorDashboardOverview = {
+  current_semester: string;
+  academic_year: string;
+  total_courses: number;
+  total_students: number; // Total students across all courses taught by this instructor
+  overall_attendance_rate: number; // Overall attendance rate for all courses taught by this instructor
+};
+
+export type AttendanceStats = {
+  present: number;
+  late: number;
+  absent: number;
+};
+
+export type InstructorDashboardCourse = {
+  id: number; // CourseOffering ID
+  course: {
+    code: string;
+    title: string;
+  };
+  section: string;
+  total_students: number;
+  total_sessions: number;
+  attendance_stats: AttendanceStats;
+  average_attendance: number;
+};
+
+export type InstructorRecentActivityStudentDetail = {
+  name: string;
+  uni_id: string;
+  image: string | null;
+};
+
+export type InstructorRecentActivity = {
+  student: InstructorRecentActivityStudentDetail;
+  course: string;
+  status: string;
+  date: string;
+  recorded_at: string;
+};
+
+export type InstructorDashboardResponse = {
+  overview: InstructorDashboardOverview;
+  courses: InstructorDashboardCourse[];
+  upcoming_sessions: UpcomingSessionDetail[];
+  recent_activity: InstructorRecentActivity[];
+};
