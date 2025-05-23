@@ -4,15 +4,10 @@ import { z } from "zod";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth.config";
 import { formatDate, formatTime } from "@/lib/utils";
+import { createSessionSchema } from "@/types/forms";
 
 const paramsSchema = z.object({
   id: z.string().transform((val) => parseInt(val)),
-});
-
-const createSessionSchema = z.object({
-  session_date: z.string().transform((val) => new Date(val)),
-  start_time: z.string().transform((val) => new Date(val)),
-  end_time: z.string().transform((val) => new Date(val)),
 });
 
 export async function POST(

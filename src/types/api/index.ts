@@ -1,4 +1,4 @@
-import { AttendanceStatus } from "@prisma/client";
+import { AttendanceStatus, Course } from "@prisma/client";
 
 type StudentDashboardOverview = {
   current_semester: string;
@@ -165,4 +165,26 @@ export type InstructorDashboardResponse = {
   courses: InstructorDashboardCourse[];
   upcoming_sessions: UpcomingSessionDetail[];
   recent_activity: InstructorRecentActivity[];
+};
+
+export type InstructorClassesResponse = {
+  id: number;
+  course: {
+    title: string;
+    code: string;
+    credits: number;
+  };
+  semester: {
+    id: number;
+    name: string;
+    academic_year: string;
+    start_date: string;
+    end_date: string;
+  };
+  section: {
+    id: number;
+    label: string;
+    year_level: number;
+  };
+  total_students: number;
 };
