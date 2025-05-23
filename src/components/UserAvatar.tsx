@@ -14,7 +14,7 @@ const UserAvatar = ({ name, lable, image }: UserAvatarProps) => {
           <AvatarImage src={image ?? ""} />
           <AvatarFallback>{name?.charAt(0)}</AvatarFallback>
         </Avatar>
-        <div className="flex flex-col">
+        <div className=" flex-col hidden md:flex">
           <p className="text-sm font-medium">{name}</p>
           <p className="text-sm text-zinc-500 capitalize">{lable}</p>
         </div>
