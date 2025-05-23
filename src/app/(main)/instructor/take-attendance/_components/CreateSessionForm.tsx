@@ -1,11 +1,7 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  createSessionFormSchema,
-  CreateSessionFormData,
-  CreateSessionRequest,
-} from "@/types/forms";
+import { createSessionFormSchema, CreateSessionFormData } from "@/types/forms";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -29,6 +25,7 @@ import { InstructorClassesResponse } from "@/types/api";
 import { toast } from "sonner";
 import { useState } from "react";
 import { AxiosError } from "axios";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ClassDisplayProps {
   class_: InstructorClassesResponse;
@@ -50,9 +47,15 @@ const ClassDisplay = ({ class_: classInfo }: ClassDisplayProps) => {
 
 interface CreateSessionFormProps {
   classes: InstructorClassesResponse[];
+  onSuccess?: () => void;
 }
 
-export const CreateSessionForm = ({ classes }: CreateSessionFormProps) => {
+export const CreateSessionForm = ({
+  classes,
+  onSuccess,
+}: CreateSessionFormProps) => {
+  const queryClient = useQueryClient();
+
   const router = useRouter();
   const createSession = useCreateSession();
   const [selectedClassId, setSelectedClassId] = useState<number>(classes[0].id);
@@ -83,7 +86,13 @@ export const CreateSessionForm = ({ classes }: CreateSessionFormProps) => {
 
       await createSession.mutateAsync({ data: request, id: selectedClassId });
       toast.success("Session created successfully");
+
+      //invalidate fetch
+      queryClient.invalidateQueries({
+        queryKey: ["sessions", selectedClass?.id], // Or your specific key for the overview
+      });
       router.refresh();
+      onSuccess?.();
     } catch (error) {
       if (error instanceof AxiosError && error.response?.data?.semester_start) {
         let errorMessage =

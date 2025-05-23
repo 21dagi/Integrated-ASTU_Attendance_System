@@ -188,3 +188,27 @@ export type InstructorClassesResponse = {
   };
   total_students: number;
 };
+
+export type SessionAttendanceStats = {
+  total: number;
+  present: number;
+  absent: number;
+  late: number;
+};
+export type CourseSessionDetail = {
+  id: number;
+  session_date: string;
+  start_time: string;
+  end_time: string;
+  attendance_stats: SessionAttendanceStats;
+};
+
+export type CourseOfferingSessionsResponse = {
+  course_info: {
+    code: string;
+    title: string;
+  };
+  section: string;
+  semester: string; // e.g., "First Semester"
+  sessions: CourseSessionDetail[];
+};

@@ -1,11 +1,13 @@
 import axios from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  CourseOfferingSessionsResponse,
   InstructorClassesResponse,
   InstructorDashboardResponse,
 } from "@/types/api";
 import { createSessionFormSchema } from "@/types/forms";
 import { z } from "zod";
+import { resolve } from "path";
 export const useGetInstructorOverview = () => {
   return useQuery({
     queryKey: ["instructor-overview"],
@@ -39,6 +41,29 @@ export const useGetClasses = () => {
     queryKey: ["instructor-classes"],
     queryFn: async (): Promise<InstructorClassesResponse[]> => {
       const response = await axios.get("/api/instructor/classes");
+      return response.data;
+    },
+  });
+};
+
+export const useGetSessions = (offerind_id: number) => {
+  return useQuery({
+    queryKey: ["sessions", offerind_id],
+    queryFn: async (): Promise<CourseOfferingSessionsResponse> => {
+      const response = await axios.get(
+        `/api/offerings/${offerind_id}/sessions`
+      );
+      return response.data;
+    },
+  });
+};
+
+export const useDelteSession = () => {
+  return useMutation({
+    mutationKey: ["delete:session"],
+    mutationFn: async (id: number) => {
+      const response = await axios.delete(`/api/sessions/${id}`);
+
       return response.data;
     },
   });
