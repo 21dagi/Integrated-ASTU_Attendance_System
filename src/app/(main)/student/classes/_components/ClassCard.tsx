@@ -28,7 +28,7 @@ export const ClassCard = ({
   return (
     <Card
       className={cn(
-        "overflow-hidden shrink-0 max-w-sm min-w-[290px]",
+        "overflow-hidden shrink-0 max-w-sm min-w-[340px]",
         className
       )}
     >
