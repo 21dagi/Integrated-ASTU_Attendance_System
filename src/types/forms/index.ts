@@ -50,3 +50,10 @@ export type CreateSessionRequest = {
   id: number;
   data: z.infer<typeof createSessionSchema>;
 };
+
+export const TakeAttendanceScheme = z.object({
+  student_id: z.number(),
+  status: z.enum(["PRESENT", "ABSENT", "LATE"]).nullable(),
+});
+
+export type BulkTakeAttendanceForm = z.infer<typeof TakeAttendanceScheme>[];

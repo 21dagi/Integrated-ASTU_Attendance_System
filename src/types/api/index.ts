@@ -212,3 +212,30 @@ export type CourseOfferingSessionsResponse = {
   semester: string; // e.g., "First Semester"
   sessions: CourseSessionDetail[];
 };
+export type StudentBasicInfo = {
+  id: number;
+  uni_id: string;
+  first_name: string;
+  last_name: string;
+  image: string; // URL to student's image
+  email: string;
+};
+
+export type SessionAttendanceRecord = {
+  student: StudentBasicInfo;
+  status: AttendanceStatus;
+};
+
+export type SessionDetailsResponse = {
+  session_id: number;
+  session_date: string;
+  start_time: string;
+  end_time: string;
+  course_info: {
+    code: string;
+    title: string;
+  };
+  section: string;
+  semester: string;
+  attendance_records: SessionAttendanceRecord[];
+};

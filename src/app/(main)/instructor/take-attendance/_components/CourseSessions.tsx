@@ -59,7 +59,9 @@ export function CourseSessions({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => router.push(`/instructor/session/${session.id}`)}
+                onClick={() =>
+                  router.push(`/instructor/sessions/${session.id}`)
+                }
               >
                 View Details
               </Button>

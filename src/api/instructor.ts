@@ -4,10 +4,11 @@ import {
   CourseOfferingSessionsResponse,
   InstructorClassesResponse,
   InstructorDashboardResponse,
+  SessionDetailsResponse,
 } from "@/types/api";
-import { createSessionFormSchema } from "@/types/forms";
+import { BulkTakeAttendanceForm, createSessionFormSchema } from "@/types/forms";
 import { z } from "zod";
-import { resolve } from "path";
+
 export const useGetInstructorOverview = () => {
   return useQuery({
     queryKey: ["instructor-overview"],
@@ -63,6 +64,36 @@ export const useDelteSession = () => {
     mutationKey: ["delete:session"],
     mutationFn: async (id: number) => {
       const response = await axios.delete(`/api/sessions/${id}`);
+
+      return response.data;
+    },
+  });
+};
+
+export const useGetSessionDetail = (id: string | null | undefined) => {
+  return useQuery({
+    queryKey: ["session:detail", id],
+    queryFn: async (): Promise<SessionDetailsResponse> => {
+      const response = await axios.get(`/api/sessions/${id}/attendance`);
+      return response.data;
+    },
+  });
+};
+
+export const useTakeBulkAttendance = () => {
+  return useMutation({
+    mutationKey: ["takebulk:attendance"],
+    mutationFn: async ({
+      sessionId,
+      data,
+    }: {
+      sessionId: string;
+      data: BulkTakeAttendanceForm;
+    }) => {
+      const response = await axios.post(
+        `/api/sessions/${sessionId}/attendance`,
+        data
+      );
 
       return response.data;
     },
