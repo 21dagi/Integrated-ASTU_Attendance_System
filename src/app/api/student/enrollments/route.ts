@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     const enrollments = await prisma.enrollment.findMany({
       where: {
         student_id: session.user.id,
-        semester_id: currentSemester.id,
+        // semester_id: currentSemester.id,
       },
       include: {
         section: {

@@ -57,15 +57,17 @@ export const ClassCard = ({
           <div className="flex items-start gap-2 text-sm">
             <Clock className="h-4 w-4 text-muted-foreground mt-0.5" />
             <span>
-              {attendance.last_session.start_time} -{" "}
-              {attendance.last_session.end_time}
+              {attendance.last_session?.start_time} -{" "}
+              {attendance.last_session?.end_time}
             </span>
           </div>
           <div className="flex items-start gap-2 text-sm">
             <CalendarDays className="h-4 w-4 text-muted-foreground mt-0.5" />
             <span>
               Last Session:{" "}
-              {new Date(attendance.last_session.date).toLocaleDateString()}
+              {attendance.last_session?.date
+                ? new Date(attendance.last_session.date).toLocaleDateString()
+                : "N/A"}
             </span>
           </div>
           <div className="flex items-center justify-between mt-4">

@@ -64,7 +64,7 @@ export type EnrolledCourseWithDetails = {
       start_time: string;
       end_time: string;
       status: string;
-    };
+    } | null;
   };
 };
 export type StudentEnrollmentDetail = {
