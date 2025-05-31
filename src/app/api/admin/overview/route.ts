@@ -33,30 +33,38 @@ export async function GET(request: NextRequest) {
     // Get total instructors
     const totalInstructors = await prisma.instructor.count();
 
-    // Get department distribution
+    // Get department distribution by counting students in each department
     const departmentDistribution = await prisma.department.findMany({
       select: {
         name: true,
-        _count: {
+        sections: {
           select: {
-            sections: true,
+            enrollments: {
+              where: {
+                semester_id: currentSemester.id,
+                is_active: true,
+              },
+              select: {
+                student_id: true,
+              },
+            },
           },
         },
       },
     });
 
     // Get monthly enrollments for current semester
-    const monthlyEnrollments = await prisma.enrollment.findMany({
-      where: {
-        semester_id: currentSemester.id,
-      },
-      select: {
-        student_id: true,
-        semester_id: true,
-        section_id: true,
-        is_active: true,
-      },
-    });
+    // const monthlyEnrollments = await prisma.enrollment.findMany({
+    //   where: {
+    //     semester_id: currentSemester.id,
+    //   },
+    //   select: {
+    //     student_id: true,
+    //     semester_id: true,
+    //     section_id: true,
+    //     is_active: true,
+    //   },
+    // });
 
     // Get attendance statistics
     const attendanceStats = await prisma.attendanceRecord.groupBy({
@@ -96,15 +104,19 @@ export async function GET(request: NextRequest) {
           total_sections: totalSections,
         },
       },
-      department_distribution: departmentDistribution.map((dept) => ({
-        name: dept.name,
-        count: dept._count.sections,
-      })),
-      monthly_enrollments: monthlyEnrollments.map((enrollment) => ({
-        student_id: enrollment.student_id,
-        section_id: enrollment.section_id,
-        is_active: enrollment.is_active,
-      })),
+      department_distribution: departmentDistribution.map((dept) => {
+        // Count unique students across all sections in this department
+        const studentIds = new Set();
+        dept.sections.forEach((section) => {
+          section.enrollments.forEach((enrollment) => {
+            studentIds.add(enrollment.student_id);
+          });
+        });
+        return {
+          name: dept.name,
+          count: studentIds.size,
+        };
+      }),
       attendance_statistics: {
         present:
           attendanceStats.find((stat) => stat.status === "PRESENT")?._count ||

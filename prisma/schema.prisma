@@ -7,6 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 model AcademicYear {
   id         Int        @id @default(autoincrement())
   name       String     @db.VarChar
@@ -14,10 +15,17 @@ model AcademicYear {
   end_date   DateTime   @db.Date
   is_active  Boolean    @default(false)
   semesters  Semester[]
+  id_generator IdGenerator?
 
   @@map("academic_years")
 }
-
+model IdGenerator {
+  acedemic_year_id Int @id
+  academic_year AcademicYear @relation(fields: [acedemic_year_id], references: [id],onDelete: Cascade)
+  qr_couter Int @default(0)
+  uni_id_couter Int @default(0)
+  @@map("id_generators")
+}
 model Semester {
   id               Int              @id @default(autoincrement())
   academic_year_id Int
@@ -68,6 +76,7 @@ model Section {
 model Student {
   id                Int                @id @default(autoincrement())
   uni_id            String             @unique @db.VarChar
+  qr_id             Int                @unique @default(autoincrement())
   first_name        String             @db.VarChar
   last_name         String             @db.VarChar
   image             String?            @default("https://randomuser.me/api/portraits/men/73.jpg")

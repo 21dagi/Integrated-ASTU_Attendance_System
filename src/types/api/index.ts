@@ -1,4 +1,4 @@
-import { AttendanceStatus } from "@prisma/client";
+import { AttendanceStatus, Course } from "@prisma/client";
 
 type StudentDashboardOverview = {
   current_semester: string;
@@ -64,7 +64,7 @@ export type EnrolledCourseWithDetails = {
       start_time: string;
       end_time: string;
       status: string;
-    };
+    } | null;
   };
 };
 export type StudentEnrollmentDetail = {
@@ -117,4 +117,125 @@ export type StudentAttendanceResponse = {
   course_details: CourseDetails;
   attendance_summary: AttendanceSummary;
   attendance_records: AttendanceRecordDetail[];
+};
+
+export type InstructorDashboardOverview = {
+  current_semester: string;
+  academic_year: string;
+  total_courses: number;
+  total_students: number; // Total students across all courses taught by this instructor
+  overall_attendance_rate: number; // Overall attendance rate for all courses taught by this instructor
+};
+
+export type AttendanceStats = {
+  present: number;
+  late: number;
+  absent: number;
+};
+
+export type InstructorDashboardCourse = {
+  id: number; // CourseOffering ID
+  course: {
+    code: string;
+    title: string;
+  };
+  section: string;
+  total_students: number;
+  total_sessions: number;
+  attendance_stats: AttendanceStats;
+  average_attendance: number;
+};
+
+export type InstructorRecentActivityStudentDetail = {
+  name: string;
+  uni_id: string;
+  image: string | null;
+};
+
+export type InstructorRecentActivity = {
+  student: InstructorRecentActivityStudentDetail;
+  course: string;
+  status: string;
+  date: string;
+  recorded_at: string;
+};
+
+export type InstructorDashboardResponse = {
+  overview: InstructorDashboardOverview;
+  courses: InstructorDashboardCourse[];
+  upcoming_sessions: UpcomingSessionDetail[];
+  recent_activity: InstructorRecentActivity[];
+};
+
+export type InstructorClassesResponse = {
+  id: number;
+  course: {
+    title: string;
+    code: string;
+    credits: number;
+  };
+  semester: {
+    id: number;
+    name: string;
+    academic_year: string;
+    start_date: string;
+    end_date: string;
+  };
+  section: {
+    id: number;
+    label: string;
+    year_level: number;
+  };
+  total_students: number;
+};
+
+export type SessionAttendanceStats = {
+  total: number;
+  present: number;
+  absent: number;
+  late: number;
+};
+export type CourseSessionDetail = {
+  id: number;
+  session_date: string;
+  start_time: string;
+  end_time: string;
+  attendance_stats: SessionAttendanceStats;
+};
+
+export type CourseOfferingSessionsResponse = {
+  course_info: {
+    code: string;
+    title: string;
+  };
+  section: string;
+  semester: string; // e.g., "First Semester"
+  sessions: CourseSessionDetail[];
+};
+export type StudentBasicInfo = {
+  id: number;
+  uni_id: string;
+  first_name: string;
+  last_name: string;
+  image: string; // URL to student's image
+  email: string;
+};
+
+export type SessionAttendanceRecord = {
+  student: StudentBasicInfo;
+  status: AttendanceStatus;
+};
+
+export type SessionDetailsResponse = {
+  session_id: number;
+  session_date: string;
+  start_time: string;
+  end_time: string;
+  course_info: {
+    code: string;
+    title: string;
+  };
+  section: string;
+  semester: string;
+  attendance_records: SessionAttendanceRecord[];
 };

@@ -33,7 +33,7 @@ export const ClassList = ({ classes, className }: ClassListProps) => {
           />
         </div>
       </div>
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <div className=" gap-6 flex flex-wrap">
         {filteredClasses.length === 0 && (
           <div className="col-span-full text-center text-muted-foreground">
             No classes found

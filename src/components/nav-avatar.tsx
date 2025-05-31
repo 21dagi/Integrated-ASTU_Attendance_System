@@ -29,9 +29,7 @@ export const NavAvatar = ({ user }: NavAvatarProps) => {
           profile
           <UserIcon />
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => signOut({ redirect: true, callbackUrl: "/" })}
-        >
+        <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/auth" })}>
           signOut
           <LogOutIcon />
         </DropdownMenuItem>

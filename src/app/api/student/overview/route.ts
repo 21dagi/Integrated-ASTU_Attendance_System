@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
       where: {
         student_id: session.user.id,
         semester_id: currentSemester.id,
-        // is_active: true,
+        is_active: true,
       },
       include: {
         section: {
@@ -102,13 +102,15 @@ export async function GET(request: NextRequest) {
     // Calculate attendance summary for each course
     const courseStats = enrolledCourses.flatMap((enrollment) =>
       enrollment.section.courseOfferings.map((offering) => {
-        const totalSessions = offering.attendanceSessions.length;
-        const presentCount = offering.attendanceSessions.reduce(
+        const studentSessions = offering.attendanceSessions.filter(
+          (session) => session.attendanceRecords.length > 0
+        );
+        const totalSessions = studentSessions.length;
+        const absentCount = studentSessions.reduce(
           (acc, session) =>
             acc +
             session.attendanceRecords.filter(
-              (record) =>
-                record.status === "PRESENT" || record.status === "LATE"
+              (record) => record.status === "ABSENT"
             ).length,
           0
         );
@@ -123,7 +125,9 @@ export async function GET(request: NextRequest) {
             : "Not Assigned",
           total_sessions: totalSessions,
           attendance_rate:
-            totalSessions > 0 ? (presentCount / totalSessions) * 100 : 0,
+            totalSessions > 0
+              ? ((totalSessions - absentCount) / totalSessions) * 100
+              : 0,
           recent_status:
             offering.attendanceSessions[0]?.attendanceRecords[0]?.status ||
             "No Records",
@@ -159,6 +163,9 @@ export async function GET(request: NextRequest) {
       },
       take: 10,
     });
+    const validCourseStats = courseStats.filter(
+      (course) => course.total_sessions > 0
+    );
 
     const response = {
       overview: {
@@ -166,20 +173,21 @@ export async function GET(request: NextRequest) {
         academic_year: currentSemester.academicYear.name,
         total_courses: courseStats.length,
         overall_attendance_rate:
-          courseStats.length > 0
-            ? courseStats.reduce(
+          validCourseStats.length > 0
+            ? validCourseStats.reduce(
                 (acc, course) => acc + course.attendance_rate,
                 0
-              ) / courseStats.length
+              ) / validCourseStats.length
             : 0,
       },
       enrolled_courses: courseStats,
       upcoming_sessions: upcomingSessions.map((session) => ({
         id: session.id,
-        date: session.session_date,
+        session_date: session.session_date,
         start_time: session.start_time,
         end_time: session.end_time,
-        course: session.courseOffering.course.title,
+        course_code: session.courseOffering.course.code,
+        course_title: session.courseOffering.course.title,
         section: session.courseOffering.section.label,
       })),
       recent_activity: recentActivity.map((activity) => ({

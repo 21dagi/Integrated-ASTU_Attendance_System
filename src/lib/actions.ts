@@ -7,16 +7,13 @@ export async function authenticate(
   prevState: string | undefined,
   formData: FormData
 ) {
+  const { email, password } = Object.fromEntries(formData);
+
   try {
-    await signIn("credentials", formData);
+    await signIn("credentials", { email, password });
   } catch (error) {
     if (error instanceof AuthError) {
-      switch (error.type) {
-        case "CredentialsSignin":
-          return "Invalid credentials.";
-        default:
-          return "Something went wrong.";
-      }
+      throw new Error("Invalid credentials.");
     }
     throw error;
   }

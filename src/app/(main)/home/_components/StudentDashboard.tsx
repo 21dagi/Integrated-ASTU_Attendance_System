@@ -5,6 +5,7 @@ import { ActivityList } from "@/components/dashboard/ActivityList";
 import { SessionList } from "@/components/dashboard/SessionList";
 import { BookOpen, Calendar, Clock, GraduationCap } from "lucide-react";
 import { StudentDashboardSkeleton } from "./StudentDashboardSkeleton";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const StudentDashboard = () => {
   const { data, isLoading, error } = useGetStudentOverview();
@@ -53,19 +54,21 @@ export const StudentDashboard = () => {
         {/* Left Column */}
         <div className="space-y-6">
           <h2 className="text-2xl font-bold">Enrolled Courses</h2>
-          <div className="grid gap-4">
-            {data.enrolled_courses.map((course) => (
-              <CourseCard
-                key={course.course_id}
-                courseCode={course.course_code}
-                courseTitle={course.course_title}
-                section={course.section}
-                instructor={course.instructor}
-                totalSessions={course.total_sessions}
-                attendanceRate={course.attendance_rate}
-              />
-            ))}
-          </div>
+          <ScrollArea className="h-[500px]">
+            <div className="grid gap-4">
+              {data.enrolled_courses.map((course) => (
+                <CourseCard
+                  key={course.course_id}
+                  courseCode={course.course_code}
+                  courseTitle={course.course_title}
+                  section={course.section}
+                  instructor={course.instructor}
+                  totalSessions={course.total_sessions}
+                  attendanceRate={course.attendance_rate}
+                />
+              ))}
+            </div>
+          </ScrollArea>
         </div>
 
         {/* Right Column */}
