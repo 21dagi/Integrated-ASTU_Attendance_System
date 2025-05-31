@@ -67,8 +67,8 @@ const adminItems = [
     icon: Home,
   },
   {
-    title: "Classes",
-    url: "/admin/classes",
+    title: "Offerings",
+    url: "/admin/offerings",
     icon: School,
   },
   {

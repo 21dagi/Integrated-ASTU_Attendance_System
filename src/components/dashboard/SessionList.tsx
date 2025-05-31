@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn, formatDateTime } from "@/lib/utils";
+import { format } from "date-fns";
 
 interface SessionItem {
   course_code: string;
@@ -43,7 +44,9 @@ export const SessionList = ({
                   Instructor: {session.instructor}
                 </p>
               </div>
-              <span className="text-sm font-medium">{session.start_time}</span>
+              <span className="text-sm font-medium">
+                {format(session.start_time, "hh:mm a")}
+              </span>
             </div>
           ))}
         </div>

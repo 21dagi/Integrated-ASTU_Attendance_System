@@ -8,7 +8,7 @@ export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
   console.log("Token:", token);
 
-  const protectedRoutes = ["/home"];
+  const protectedRoutes = ["/home", "/student", "/instructor", "/admin"];
   // const studentRoutes = ["/student"];
   // const instructorRoutes = ["/instructor"];
   // const adminRoutes = ["/admin"];

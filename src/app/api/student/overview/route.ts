@@ -183,10 +183,11 @@ export async function GET(request: NextRequest) {
       enrolled_courses: courseStats,
       upcoming_sessions: upcomingSessions.map((session) => ({
         id: session.id,
-        date: session.session_date,
+        session_date: session.session_date,
         start_time: session.start_time,
         end_time: session.end_time,
-        course: session.courseOffering.course.title,
+        course_code: session.courseOffering.course.code,
+        course_title: session.courseOffering.course.title,
         section: session.courseOffering.section.label,
       })),
       recent_activity: recentActivity.map((activity) => ({

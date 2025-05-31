@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { DotIcon, Loader2, LogOutIcon } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
 import { StudentDashboard } from "./_components/StudentDashboard";
-import AdminDashboard from "./_components/AdminDashboard";
+import { AdminDashboard } from "./_components/AdminDashboard";
 import InstructorDashboard from "./_components/InstructorDashboard";
 
 const HomePage = () => {

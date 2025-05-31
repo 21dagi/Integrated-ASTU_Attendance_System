@@ -5,6 +5,9 @@ import bcrypt from "bcrypt";
 import { ROLE } from "@/types";
 
 export const authConfig: AuthOptions = {
+  pages: {
+    signIn: "/auth",
+  },
   providers: [
     Credentials({
       credentials: {
