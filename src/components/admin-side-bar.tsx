@@ -1,7 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { BarChart, LineChart, PieChart } from "lucide-react"
 
-
 export function DashboardContent() {
   return (
     <div className="space-y-6">
