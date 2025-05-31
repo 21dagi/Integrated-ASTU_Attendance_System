@@ -28,6 +28,7 @@ const roles = [
   { key: "instructor", label: "Instructor", icon: Presentation },
   { key: "student", label: "Student", icon: GraduationCap },
 ];
+
 const loginSchema = z.object({
   username: z.string().min(1, "Username is required"),
   password: z.string().min(1, "Password is required"),
@@ -42,7 +43,7 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  const [role, setRole] = useState<"admin" | "student" | "student" | null>(
+  const [role, setRole] = useState<"admin" | "instructor" | "student" | null>(
     null
   );
   const [isLoading, setIsLoading] = useState(false);
@@ -58,6 +59,7 @@ export function LoginForm({
       type: role,
     },
   });
+
   useEffect(() => {
     form.setValue("type", role);
   }, [role]);
@@ -95,13 +97,10 @@ export function LoginForm({
   return (
     <div className={cn("max-w-md w-full mx-auto", className)} {...props}>
       <Toaster />
-      <Card className="shadow-lg bg-[#ffffff] border-0">
-        {/* Removed border color */}
+      <Card className="shadow-lg border">
         <CardHeader className="text-center space-y-2">
-          <CardTitle className="text-2xl font-semibold text-[#343a40]">
-            Signin Here
-          </CardTitle>
-          <p className="text-sm text-[#6c757d]">
+          <CardTitle className="text-2xl font-semibold">Sign in Here</CardTitle>
+          <p className="text-sm text-muted-foreground">
             Sign in to access your account
           </p>
         </CardHeader>
@@ -118,11 +117,10 @@ export function LoginForm({
                       variant="outline"
                       className={cn(
                         "flex-1 flex flex-col items-center h-24 w-10 py-4 rounded-lg border-2 transition-all duration-200",
-                        "bg-primary ",
-                        "hover:border-gray-400 hover:bg-gray-200 hover:text-black hover:shadow-sm",
+                        "hover:shadow-sm",
                         role === key
-                          ? "border-[#007bff] text-[#212529]"
-                          : "border-[#dee2e6] text-[#212529]"
+                          ? "border-primary bg-primary/10 text-primary"
+                          : "border-border hover:bg-accent hover:text-accent-foreground"
                       )}
                     >
                       <Icon className="w-6 h-6 mb-2" />
@@ -136,12 +134,11 @@ export function LoginForm({
                     name="username"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>university - ID</FormLabel>
+                        <FormLabel>University ID</FormLabel>
                         <FormControl>
                           <Input
                             type="text"
                             placeholder="Enter your University ID"
-                            className="text-primary-foreground"
                             {...field}
                           />
                         </FormControl>
@@ -154,12 +151,11 @@ export function LoginForm({
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>password</FormLabel>
+                        <FormLabel>Password</FormLabel>
                         <FormControl>
                           <Input
                             type="password"
-                            placeholder="password"
-                            className="text-primary-foreground"
+                            placeholder="Enter your password"
                             {...field}
                           />
                         </FormControl>
@@ -169,7 +165,7 @@ export function LoginForm({
                   />
                   <Button
                     type="submit"
-                    className="w-full py-2 text-base font-medium transition-all hover:shadow-md bg-[#171718] hover:bg-[#2c2c2c] text-white"
+                    className="w-full py-2 text-base font-medium transition-all hover:shadow-md"
                     disabled={isLoading}
                   >
                     {isLoading ? "Signing in..." : "Sign In"}

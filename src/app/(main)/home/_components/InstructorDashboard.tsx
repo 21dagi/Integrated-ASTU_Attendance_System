@@ -4,8 +4,9 @@ import { OverviewCard } from "@/components/dashboard/OverviewCard";
 import { CourseCard } from "@/components/dashboard/CourseCard";
 import { ActivityList } from "@/components/dashboard/ActivityList";
 import { SessionList } from "@/components/dashboard/SessionList";
-import { BookOpen, Calendar, Clock, Users } from "lucide-react";
+import { BookOpen, Calendar, Clock, Scroll, Users } from "lucide-react";
 import { InstructorDashboardSkeleton } from "./InstructorDashboardSkeleton";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const InstructorDashboard = () => {
   const { data, isLoading, error } = useGetInstructorOverview();
@@ -61,17 +62,19 @@ const InstructorDashboard = () => {
         <div className="space-y-6">
           <h2 className="text-2xl font-bold">My Courses</h2>
           <div className="grid gap-4">
-            {data.courses.map((course) => (
-              <CourseCard
-                key={course.id}
-                courseCode={course.course.code}
-                courseTitle={course.course.title}
-                section={course.section}
-                instructor="You"
-                totalSessions={course.total_sessions}
-                attendanceRate={course.average_attendance}
-              />
-            ))}
+            <ScrollArea className="h-[400px]">
+              {data.courses.map((course) => (
+                <CourseCard
+                  key={course.id}
+                  courseCode={course.course.code}
+                  courseTitle={course.course.title}
+                  section={course.section}
+                  instructor="You"
+                  totalSessions={course.total_sessions}
+                  attendanceRate={course.average_attendance}
+                />
+              ))}
+            </ScrollArea>
           </div>
         </div>
 

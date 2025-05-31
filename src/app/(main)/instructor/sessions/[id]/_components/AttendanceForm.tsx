@@ -20,6 +20,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTakeBulkAttendance } from "@/api/instructor";
+import { Users, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
 
 const attendanceFormSchema = z.object({
   attendance: z.array(
@@ -96,6 +97,22 @@ export function AttendanceForm({ session }: AttendanceFormProps) {
     form.setValue("attendance", updatedAttendance);
   };
 
+  // Handle batch action to mark all students with the same status
+  const handleBatchAction = (status: AttendanceStatus) => {
+    const updatedAttendance: Record<number, AttendanceStatus> = {};
+    const formAttendance = session.attendance_records.map((record) => {
+      updatedAttendance[record.student.id] = status;
+      return {
+        student_id: record.student.id,
+        status: status,
+      };
+    });
+
+    setAttendance(updatedAttendance);
+    form.setValue("attendance", formAttendance);
+    toast.success(`Marked all students as ${status.toLowerCase()}`);
+  };
+
   const getStatusColor = (status: AttendanceStatus) => {
     switch (status) {
       case "PRESENT":
@@ -119,6 +136,51 @@ export function AttendanceForm({ session }: AttendanceFormProps) {
               </Badge>
               <Badge variant="secondary">Section {session.section}</Badge>
               <Badge variant="secondary">{session.semester}</Badge>
+            </div>
+          </div>
+
+          {/* Batch Actions */}
+          <div className="mb-6 rounded-lg border bg-muted/50 p-4">
+            <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Users className="h-5 w-5 text-muted-foreground" />
+                <span className="font-medium text-sm">Batch Actions</span>
+                <span className="text-xs text-muted-foreground">
+                  ({session.attendance_records.length} students)
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleBatchAction("PRESENT")}
+                  className="text-green-700 border-green-200 hover:bg-green-50 dark:text-green-400 dark:border-green-800 dark:hover:bg-green-950"
+                >
+                  <CheckCircle2 className="h-4 w-4 mr-1" />
+                  Mark All Present
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleBatchAction("ABSENT")}
+                  className="text-red-700 border-red-200 hover:bg-red-50 dark:text-red-400 dark:border-red-800 dark:hover:bg-red-950"
+                >
+                  <XCircle className="h-4 w-4 mr-1" />
+                  Mark All Absent
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleBatchAction("LATE")}
+                  className="text-yellow-700 border-yellow-200 hover:bg-yellow-50 dark:text-yellow-400 dark:border-yellow-800 dark:hover:bg-yellow-950"
+                >
+                  <AlertCircle className="h-4 w-4 mr-1" />
+                  Mark All Late
+                </Button>
+              </div>
             </div>
           </div>
 
