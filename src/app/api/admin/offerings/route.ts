@@ -12,7 +12,18 @@ export async function GET(request: NextRequest) {
   const offerings = await prisma.courseOffering.findMany({
     select: {
       id: true,
-      section: true,
+      section: {
+        select: {
+          id: true,
+          year_level: true,
+          semester_id: true,
+          department: {
+            select: {
+              name: true, // Fetch department name
+            },
+          },
+        },
+      },
       semester: true,
       course: true,
       instructor: {

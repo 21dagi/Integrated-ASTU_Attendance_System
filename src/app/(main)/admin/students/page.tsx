@@ -1,10 +1,20 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Download, Plus, Search } from "lucide-react"
-
+"use client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Download, Plus, Search } from "lucide-react";
+import { useGetStudents } from "@/api/admin";
 export default function StudentsPage() {
+  const { data, isLoading, isError } = useGetStudents(); // Fetch student data
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -22,19 +32,7 @@ export default function StudentsPage() {
       </div>
 
       <Card>
-        <CardHeader className="pb-2">
-          <CardTitle>Student Directory</CardTitle>
-          <CardDescription>Manage all registered students</CardDescription>
-        </CardHeader>
         <CardContent>
-          <div className="flex items-center gap-2 mb-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search students..." className="pl-8" />
-            </div>
-            <Button variant="outline">Filter</Button>
-          </div>
-
           <Table>
             <TableHeader>
               <TableRow>
@@ -42,24 +40,34 @@ export default function StudentsPage() {
                 <TableHead>Name</TableHead>
                 <TableHead>Department</TableHead>
                 <TableHead>Year</TableHead>
-                <TableHead>GPA</TableHead>
-                <TableHead>Status</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {Array.from({ length: 10}).map((_, i) => (
-                <TableRow key={i}>
-                  <TableCell>STU-{1000 + i}</TableCell>
-                  <TableCell>Student Name {i + 1}</TableCell>
-                  <TableCell>Computer Science</TableCell>
-                  <TableCell>Year {(i % 4) + 1}</TableCell>
-                  <TableCell>{(3 + (i % 10) / 10).toFixed(1)}</TableCell>
-                  <TableCell>
-                    <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-100 text-green-800">
-                      Active
-                    </span>
+              {isLoading && (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center">
+                    Loading...
                   </TableCell>
+                </TableRow>
+              )}
+              {isError && (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center text-red-500">
+                    Error fetching students
+                  </TableCell>
+                </TableRow>
+              )}
+              {data?.map((student) => (
+                <TableRow key={student.id}>
+                  <TableCell>{student.uni_id}</TableCell>
+                  <TableCell>
+                    {student.first_name} {student.last_name}
+                  </TableCell>
+                  <TableCell>
+                    {student.section.department?.name || "unspecified"}
+                  </TableCell>{" "}
+                  <TableCell>{student.section.year_level}</TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="sm">
                       View
@@ -75,5 +83,5 @@ export default function StudentsPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

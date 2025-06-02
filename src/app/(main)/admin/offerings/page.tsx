@@ -1,10 +1,26 @@
+"use client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Plus, Search } from "lucide-react";
-
+import { useGetCourseOfferings } from "@/api/admin";
 export default function OfferingsPage() {
+  const { data, isLoading, isError } = useGetCourseOfferings();
+
   return (
     <div className="space-y-10">
       <Card>
@@ -37,107 +53,38 @@ export default function OfferingsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {[
-                 {
-    section: "1",
-    department: "Computer Science",
-    instructor: "Dr. Alice Smith",
-    year: 2,
-    students: 45,
-    academicYear: "2024/25",
-    semester: "1st",
-  },
-  {
-    section: "2",
-    department: "Mathematics",
-    instructor: "Dr. John Doe",
-    year: 1,
-    students: 38,
-    academicYear: "2024/25",
-    semester: "2nd",
-  },
-  {
-    section: "1",
-    department: "Physics",
-    instructor: "Dr. Rachel Green",
-    year: 1,
-    students: 40,
-    academicYear: "2024/25",
-    semester: "1st",
-  },
-  {
-    section: "3",
-    department: "Software Engineering",
-    instructor: "Dr. Elias Teklu",
-    year: 3,
-    students: 50,
-    academicYear: "2024/25",
-    semester: "2nd",
-  },
-  {
-    section: "2",
-    department: "Electrical Engineering",
-    instructor: "Dr. Hana Gebre",
-    year: 2,
-    students: 42,
-    academicYear: "2024/25",
-    semester: "1st",
-  },
-  {section: "1",
-    department: "Computer Science",
-    instructor: "Dr. Alice Smith",
-    year: 2,
-    students: 45,
-    academicYear: "2024/25",
-    semester: "1st",
-  },
-  {
-    section: "2",
-    department: "Mathematics",
-    instructor: "Dr. John Doe",
-    year: 1,
-    students: 38,
-    academicYear: "2024/25",
-    semester: "2nd",
-  },
-  {
-    section: "1",
-    department: "Physics",
-    instructor: "Dr. Rachel Green",
-    year: 1,
-    students: 40,
-    academicYear: "2024/25",
-    semester: "1st",
-  },
-  {
-    section: "3",
-    department: "Software Engineering",
-    instructor: "Dr. Elias Teklu",
-    year: 3,
-    students: 50,
-    academicYear: "2024/25",
-    semester: "2nd",
-  },
-  {
-    section: "2",
-    department: "Electrical Engineering",
-    instructor: "Dr. Hana Gebre",
-    year: 2,
-    students: 42,
-    academicYear: "2024/25",
-    semester: "1st",
-  },
-              ].map((offering, i) => (
-                <TableRow key={i}>
-                  <TableCell>{offering.section}</TableCell>
-                  <TableCell>{offering.department}</TableCell>
-                  <TableCell>{offering.instructor}</TableCell>
-                  <TableCell>{offering.year}</TableCell>
-                  <TableCell>{offering.students}</TableCell>
-                  <TableCell>{offering.academicYear}</TableCell>
-                  <TableCell>{offering.semester}</TableCell>
+              {isLoading && (
+                <TableRow>
+                  <TableCell colSpan={8} className="text-center">
+                    Loading...
+                  </TableCell>
+                </TableRow>
+              )}
+              {isError && (
+                <TableRow>
+                  <TableCell colSpan={8} className="text-center text-red-500">
+                    Error fetching course offerings
+                  </TableCell>
+                </TableRow>
+              )}
+              {data?.map((offering) => (
+                <TableRow key={offering.id}>
+                  <TableCell>{offering.section.id}</TableCell>
+                  <TableCell>
+                    {offering.section.department?.name || "unspecified"}
+                  </TableCell>
+                  <TableCell>
+                    {offering.instructor.first_name}{" "}
+                    {offering.instructor.last_name}
+                  </TableCell>
+                  <TableCell>{offering.section.year_level}</TableCell>
+                  <TableCell>{offering.totalStudents}</TableCell>
+                  <TableCell>{offering.semester.academic_year_id}</TableCell>
+                  <TableCell>{offering.semester.name}</TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="sm">Edit</Button>
+                    <Button variant="ghost" size="sm">
+                      Edit
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}

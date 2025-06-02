@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -5,9 +7,30 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { BarChart, LineChart, PieChart } from "lucide-react";
+import { LineChart, PieChart } from "lucide-react";
+import {
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  Tooltip,
+  Bar,
+  Rectangle,
+} from "recharts"; // Ensure correct imports
+
+import { useGetAdminOverview } from "@/api/admin"; // Import the hook
+import { DepartmentDistributionChart } from "@/components/graphs/DepartmentDistributionChart";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 
 export function AdminDashboard() {
+  const { data, isLoading, isError } = useGetAdminOverview(); // Fetch data using the hook
+
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error fetching admin overview</p>;
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Dashboard</h1>
@@ -21,10 +44,9 @@ export function AdminDashboard() {
             <CardDescription>All registered students</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">2,853</div>
-            <p className="text-xs text-muted-foreground">
-              +12% from last month
-            </p>
+            <div className="text-2xl font-bold">
+              {data?.overview.total_students} {/* Replace hardcoded value */}
+            </div>
           </CardContent>
         </Card>
 
@@ -36,8 +58,9 @@ export function AdminDashboard() {
             <CardDescription>All faculty members</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">145</div>
-            <p className="text-xs text-muted-foreground">+3% from last month</p>
+            <div className="text-2xl font-bold">
+              {data?.overview.total_instructors} {/* Replace hardcoded value */}
+            </div>
           </CardContent>
         </Card>
 
@@ -49,10 +72,9 @@ export function AdminDashboard() {
             <CardDescription>Current semester</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">87</div>
-            <p className="text-xs text-muted-foreground">
-              +5% from last semester
-            </p>
+            <div className="text-2xl font-bold">
+              {data?.overview.active_classes} {/* Replace hardcoded value */}
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -60,23 +82,71 @@ export function AdminDashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card className="col-span-2">
           <CardHeader>
-            <CardTitle>Student Enrollment</CardTitle>
-            <CardDescription>Monthly enrollment trends</CardDescription>
+            <CardTitle>Gender Distribution</CardTitle>
+            <CardDescription>
+              Comparison of male and female students
+            </CardDescription>
           </CardHeader>
-          <CardContent className="h-80 flex items-center justify-center">
-            <LineChart className="h-64 w-64 text-muted-foreground" />
+          <CardContent>
+            <ChartContainer
+              config={{
+                male: { label: "Male", color: "var(--chart-1)" },
+                female: { label: "Female", color: "var(--chart-2)" },
+              }}
+            >
+              <BarChart
+                width={500}
+                height={300}
+                data={
+                  data?.gender_distribution
+                    ? data.gender_distribution.map((item) => ({
+                        category: item.gender === "M" ? "Male" : "Female",
+                        count: item.count,
+                      }))
+                    : []
+                }
+              >
+                <defs>
+                  <linearGradient
+                    id="blueBlackGradient"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop offset="0%" stopColor="#1E3A8A" /> {/* Dark Blue */}
+                    <stop offset="100%" stopColor="#000000" /> {/* Black */}
+                  </linearGradient>
+                </defs>
+                <XAxis
+                  dataKey="category"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={10}
+                />
+                <Tooltip
+                  cursor={false}
+                  content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                      return (
+                        <span className="text-sm font-medium text-white">
+                          {payload[0].value} {/* Display only the count */}
+                        </span>
+                      );
+                    }
+                    return null;
+                  }}
+                />
+                <Bar
+                  dataKey="count"
+                  fill="url(#blueBlackGradient)" // Apply gradient
+                  radius={[10, 10, 0, 0]}
+                />
+              </BarChart>
+            </ChartContainer>
           </CardContent>
         </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Department Distribution</CardTitle>
-            <CardDescription>Students by department</CardDescription>
-          </CardHeader>
-          <CardContent className="h-80 flex items-center justify-center">
-            <PieChart className="h-64 w-64 text-muted-foreground" />
-          </CardContent>
-        </Card>
+        <DepartmentDistributionChart data={data} />
       </div>
 
       <Card>
